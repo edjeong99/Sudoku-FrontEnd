@@ -1,0 +1,250 @@
+/* App styles */
+.app-container {
+  display: flex;
+  flex-direction: row;
+}
+
+#main {
+  flex-grow: 1;
+  padding: 16px;
+  transition: margin-left 0.3s;
+}
+
+.menu-icon {
+  font-size: 30px;
+  cursor: pointer;
+  display: none;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+}
+
+@media screen and (max-width: 768px) {
+  .menu-icon {
+    display: block;
+  }
+
+  #main {
+    margin-left: 0;
+  }
+
+  #main.sidebar-open {
+    margin-left: 250px;
+  }
+}
+
+
+
+
+/* Sudoku board styles */
+.sudoku-container {
+  display: flex;  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  border: 3px solid black;
+
+}
+
+.sudoku-board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.sudoku-row {
+  display: flex;
+}
+
+.sudoku-cell {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box; /* Include border in the element's width and height */
+}
+
+.sudoku-cell input {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  border: none;
+  font-size: 20px;
+}
+
+.sudoku-cell input.multi-numbers {
+  font-size: 14px;
+}
+
+.sudoku-cell.incorrect input {
+  background-color: red;
+}
+
+.top-border {
+  border-top: 3px solid black;
+}
+
+.left-border {
+  border-left: 3px solid black;
+}
+
+.bottom-border {
+  border-bottom: 3px solid black;
+}
+
+.right-border {
+  border-right: 3px solid black;
+}
+
+@media screen and (max-width: 768px) {
+  .sudoku-cell {
+    width: 30px;
+    height: 30px;
+  }
+
+  .sudoku-cell input {
+    font-size: 18px;
+  }
+
+  .sudoku-cell input.multi-numbers {
+    font-size: 12px;
+  }
+}
+
+
+
+.hint-cell{
+  background-color: bisque;
+}
+.hint-message {
+  margin-top: 10px;
+  color: #d9534f;
+}
+
+.sudoku-cell.highlighted {
+  background-color: #ffeb3b !important;
+}
+
+/* Buttons */
+.button-container {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.button {
+  padding: 10px 20px;
+  font-size: 0.8em;
+  cursor: pointer;
+  margin : 10px;
+}
+
+/* Sidebar styles */
+.sidebar {
+  height: 100%;
+  width: 250px;
+  position: fixed;
+  top: 0;
+  left: 0; /* Always visible on larger screens */
+  background-color: turquoise;
+  padding: 20px;
+  overflow-x: hidden;
+  transition: left 0.3s;
+  z-index: 1;
+}
+
+.sidebar a {
+  padding: 15px 25px;
+  text-decoration: none;
+  font-size: 25px;
+  color: white;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidebar a:hover {
+  background-color: #575757;
+}
+.sidebar h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+.sidebar h3 {
+  margin-bottom: 10px;
+}
+
+.sidebar button {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.sidebar input {
+  display: block;
+  margin: 10px 0;
+  padding: 5px;
+}
+@media screen and (max-width: 768px) {
+  .sidebar {
+    left: -250px; /* Hidden by default on mobile */
+  }
+
+  .sidebar.open {
+    left: 0;
+  }
+}
+
+@media screen and (min-width: 769px) {
+  .menu-icon {
+    display: none;
+  }
+
+  #main {
+    margin-left: 250px;
+  }
+}
+
+
+/* MODAL */
+.modal {
+
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Center the modal horizontally and vertically */
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Box shadow for a subtle depth effect */
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  color: #888;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
