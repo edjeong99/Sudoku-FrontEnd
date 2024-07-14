@@ -30,9 +30,9 @@ function App() {
       setUser={setUser} 
       />
       <div id="main" className={sidebarOpen ? 'sidebar-open' : ''}>
-        <button className="menu-icon" onClick={toggleSidebar}>
+        {/* <button className="menu-icon" onClick={toggleSidebar}>
           &#9776;
-        </button>
+        </button> */}
 
         <SudokuBoard difficulty={difficulty} key={key} />
       </div>

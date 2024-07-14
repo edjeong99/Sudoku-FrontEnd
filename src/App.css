@@ -32,6 +32,9 @@
   #main.sidebar-open {
     margin-left: 250px;
   }
+  .menu-hidden {
+    display: none;
+  }
 }
 
 
@@ -144,18 +147,19 @@
 
 /* Sidebar styles */
 .sidebar {
+  width: 200px;
   height: 100%;
-  width: 250px;
+  background-color: #333;
+  color: white;
+  padding: 15px;
   position: fixed;
   top: 0;
-  left: 0; /* Always visible on larger screens */
-  background-color: turquoise;
-  padding: 20px;
-  overflow-x: hidden;
-  transition: left 0.3s;
-  z-index: 1;
+  left: 0;
+  z-index: 1000;
 }
-
+.sidebar-visible {
+  display: block;
+}
 .sidebar a {
   padding: 15px 25px;
   text-decoration: none;
@@ -171,6 +175,7 @@
 .sidebar h2 {
   font-size: 24px;
   margin-bottom: 20px;
+  text-align: center;
 }
 .sidebar h3 {
   margin-bottom: 10px;
@@ -179,23 +184,45 @@
 .sidebar button {
   display: block;
   width: 100%;
+  max-width: 150px;
   margin: 10px 0;
-  padding: 10px;
-  font-size: 16px;
+  padding: 5px;
+  font-size: 1rem;
   cursor: pointer;
 }
 .sidebar input {
   display: block;
   margin: 10px 0;
   padding: 5px;
+  width: 100%;
+  max-width: 150px;
 }
+
+.menu-button {
+  display: none; /* Hidden by default */
+  background-color: #333;
+  color: white;
+  padding: 10px;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1001;
+  cursor: pointer;
+}
+
 @media screen and (max-width: 768px) {
   .sidebar {
-    left: -250px; /* Hidden by default on mobile */
+    display : none;
+    /*left: -250px;  Hidden by default on mobile */
   }
-
-  .sidebar.open {
-    left: 0;
+  .sidebar-visible {
+    display: block;
+  }
+  .menu-button {
+    display: block;
+  }
+  .menu-button {
+    display: block;
   }
 }
 
@@ -214,7 +241,7 @@
 .modal {
 
   position: fixed;
-  z-index: 1000;
+  z-index: 10001;
   left: 0;
   top: 0;
   width: 100%;
