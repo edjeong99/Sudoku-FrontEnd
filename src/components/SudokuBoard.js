@@ -12,13 +12,15 @@ const SudokuBoard = ({difficulty}) => {
     const [highlightedCell, setHighlightedCell] = useState(null);
     const [hintCells, setHintCells] = useState(new Set()); // State to track hint cells
 
-  
+    const API_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
+console.log(process.env)
     useEffect(() => {
       fetchPuzzle(difficulty); // Default difficulty
+      console.log(API_URL,process.env.REACT_APP_API_BASE_URL )
     }, [difficulty]);
 
     const fetchPuzzle = () => {
-        axios.get(`http://localhost:5000/generate?difficulty=${difficulty}`)
+        axios.get(`${API_URL}/generate?difficulty=${difficulty}`)
       .then(response => {
         console.log(response.data)
         const { puzzle, solution } = response.data;
