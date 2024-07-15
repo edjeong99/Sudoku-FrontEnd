@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-
+import Timer from './Timer';
 
 const SudokuBoard = ({difficulty}) => {
     const [puzzle, setPuzzle] = useState([]);
@@ -11,13 +11,20 @@ const SudokuBoard = ({difficulty}) => {
     const [hint, setHint] = useState(null);
     const [highlightedCell, setHighlightedCell] = useState(null);
     const [hintCells, setHintCells] = useState(new Set()); // State to track hint cells
+    const [isSolved, setIsSolved] = useState(false);
+    const [resetTimer, setResetTimer] = useState(false);
 
-    const API_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
-console.log(process.env)
+    const API_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:8080";
+
     useEffect(() => {
       fetchPuzzle(difficulty); // Default difficulty
-      console.log(API_URL,process.env.REACT_APP_API_BASE_URL )
     }, [difficulty]);
+    
+    useEffect(() => {
+      if (resetTimer) {
+        setResetTimer(false);
+      }
+    }, [resetTimer]);
 
     const fetchPuzzle = () => {
         axios.get(`${API_URL}/generate?difficulty=${difficulty}`)
@@ -31,6 +38,8 @@ console.log(process.env)
         setIncorrectCells([]);
         setHint(null);
         setHighlightedCell(null); // Reset highlighted cell
+        setIsSolved(false); // for timer reset
+        setResetTimer(true); // for timer reset
       })
       .catch(error => {
         console.error('There was an error fetching the puzzle!', error);
@@ -39,9 +48,9 @@ console.log(process.env)
   
 
     const handleInputChange = (e, row, col, num) => {
-      console.log(e?.target)
+     // console.log(e?.target)
       const value = e ? e.target.value.replace(/[^1-9]/g, '') : num
-      console.log(value)
+     // console.log(value)
      
       const newBoard = userInput.map((r, rowIndex) =>
         r.map((cell, colIndex) => (rowIndex === row && colIndex === col ? (value !== '' ? value : '') : cell))
@@ -98,6 +107,7 @@ console.log(process.env)
         message += `to solve. Keep trying!`;
       } else {
         message = 'Puzzle solved correctly!';
+        setIsSolved(true);
       }
       // Add count of correct cells to the message
       message += ` You got ${correctCount} cells correct.`;
@@ -112,7 +122,7 @@ console.log(process.env)
         const puzzleForHint = userInput.map(row => row.map(cell => (cell === '' ? 0 : parseInt(cell, 10))));
 
         console.log(puzzleForHint)
-        const response = await axios.post('http://localhost:5000/hint', { puzzle: puzzleForHint });
+        const response = await axios.post(`${API_URL}/hint`, { puzzle: puzzleForHint });
         const hint = response.data;
         console.log(hint)
         setHint(hint);
@@ -153,7 +163,9 @@ console.log(hintCells)
                                    ${highlightedCell && highlightedCell.row === rowIndex && highlightedCell.col === colIndex ? 
                                   'highlighted' : ''} 
                                   ${hintCells.has(`${rowIndex}-${colIndex}`) ? 'hint-cell' : ''}
-                                   ${userInput[rowIndex][colIndex] && userInput[rowIndex][colIndex].length > 1 ? 'multi-numbers' : ''}`}
+                                   ${userInput[rowIndex][colIndex] && userInput[rowIndex][colIndex].length > 1 ? 'multi-numbers' : ''}
+                                  ${puzzle[rowIndex][colIndex] === 0 ? 'user-input' : ''}`
+                                  }
                       onChange={(e) => handleInputChange(e, rowIndex, colIndex)}
                       disabled={cell !== 0}
                     />
@@ -170,7 +182,10 @@ console.log(hintCells)
       
       </div>
         {message && <div className="hint-message">{message}</div>}
+      
+        <Timer isSolved={isSolved} reset={resetTimer} />
       </div>
+
     );
   };
   
