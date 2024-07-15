@@ -29,36 +29,47 @@ const AuthComponent = ({ setUser }) => {
   };
 
   return (
-    <div>
-      <h3>{isSignUp ? 'Sign Up' : 'Sign In'}</h3>
+    <div className="mt-4">
+    <h3 className="text-lg font-semibold mb-4 text-white">
+      {isSignUp ? 'Sign Up' : 'Sign In'}
+    </h3>
+    <input
+      type="email"
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
+      placeholder="Email"
+      className="w-full px-3 py-2 mb-3 text-sm text-gray-700 bg-white border rounded-md focus:outline-none focus:border-blue-500"
+    />
+    <input
+      type="password"
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+      placeholder="Password"
+      className="w-full px-3 py-2 mb-3 text-sm text-gray-700 bg-white border rounded-md focus:outline-none focus:border-blue-500"
+    />
+    {isSignUp && (
       <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Email"
+        type="text"
+        value={displayName}
+        onChange={(e) => setDisplayName(e.target.value)}
+        placeholder="Display Name"
+        className="w-full px-3 py-2 mb-3 text-sm text-gray-700 bg-white border rounded-md focus:outline-none focus:border-blue-500"
       />
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-      />
-      {isSignUp && (
-        <input
-          type="text"
-          value={displayName}
-          onChange={(e) => setDisplayName(e.target.value)}
-          placeholder="Display Name"
-        />
-      )}
-      <button onClick={isSignUp ? handleSignUp : handleSignIn}>
-        {isSignUp ? 'Sign Up' : 'Sign In'}
-      </button>
-      <button onClick={() => setIsSignUp((prev) => !prev)}>
-        {isSignUp ? 'Already have an account? Sign In' : 'Need an account? Sign Up'}
-      </button>
-      <p>{message}</p>
-    </div>
+    )}
+    <button 
+      onClick={isSignUp ? handleSignUp : handleSignIn}
+      className="w-full px-4 py-2 mb-3 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+    >
+      {isSignUp ? 'Sign Up' : 'Sign In'}
+    </button>
+    <button 
+      onClick={() => setIsSignUp((prev) => !prev)}
+      className="w-full px-4 py-2 mb-3 text-sm font-medium text-blue-500 bg-white rounded-md hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+    >
+      {isSignUp ? 'Already have an account? Sign In' : 'Need an account? Sign Up'}
+    </button>
+    <p className="text-sm text-white">{message}</p>
+  </div>
   );
 };
 

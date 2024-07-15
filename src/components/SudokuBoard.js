@@ -19,7 +19,7 @@ const SudokuBoard = ({difficulty}) => {
     useEffect(() => {
       fetchPuzzle(difficulty); // Default difficulty
     }, [difficulty]);
-    
+
     useEffect(() => {
       if (resetTimer) {
         setResetTimer(false);
@@ -142,50 +142,55 @@ console.log(hintCells)
 
 
     return (
-      <div className="sudoku-container">
-        <div>Difficulty Level : {difficulty}</div>
-        <div className="sudoku-board">
-          {puzzle.map((row, rowIndex) => (
-            <div key={rowIndex} className="sudoku-row">
-              {row.map((cell, colIndex) => {
-                const isIncorrect = incorrectCells.some(([i, j]) => i === rowIndex && j === colIndex);
-                return (
-                  <div
-                    key={colIndex}
-                    className={`sudoku-cell ${isIncorrect ? 'incorrect' : ''} ${rowIndex % 3 === 0 ? 'top-border' : ''} ${colIndex % 3 === 0 ? 'left-border' : ''} ${rowIndex === 8 ? 'bottom-border' : ''} ${colIndex === 8 ? 'right-border' : ''}`}
-                  >
-                    <input
-                     key={`${rowIndex}-${colIndex}`}
-                      type="text"
-                      value={userInput[rowIndex][colIndex]}
-                      className= {`sudoku-cell 
-                                   ${cell !== 0 ? 'initial' : ''} 
-                                   ${highlightedCell && highlightedCell.row === rowIndex && highlightedCell.col === colIndex ? 
-                                  'highlighted' : ''} 
-                                  ${hintCells.has(`${rowIndex}-${colIndex}`) ? 'hint-cell' : ''}
-                                   ${userInput[rowIndex][colIndex] && userInput[rowIndex][colIndex].length > 1 ? 'multi-numbers' : ''}
-                                  ${puzzle[rowIndex][colIndex] === 0 ? 'user-input' : ''}`
-                                  }
-                      onChange={(e) => handleInputChange(e, rowIndex, colIndex)}
-                      disabled={cell !== 0}
-                    />
-                  </div>
-                );
-              })}
+      <div className="max-w-lg mx-auto p-4">
+  <div className="text-lg font-semibold mb-4">Difficulty Level: {difficulty}</div>
+  <div className="grid grid-cols-9 gap-0 border-2 border-gray-800">
+    {puzzle.map((row, rowIndex) => (
+      <React.Fragment key={rowIndex}>
+        {row.map((cell, colIndex) => {
+          const isIncorrect = incorrectCells.some(([i, j]) => i === rowIndex && j === colIndex);
+          return (
+            <div
+              key={colIndex}
+              className={`
+                relative w-10 h-10
+                ${isIncorrect ? 'bg-red-200' : ''}
+                border border-gray-300
+                ${rowIndex % 3 === 0 ? 'border-t-2 border-t-gray-800' : ''}
+                ${colIndex % 3 === 0 ? 'border-l-2 border-l-gray-800' : ''}
+                ${rowIndex === 8 ? 'border-b-2 border-b-gray-800' : ''}
+                ${colIndex === 8 ? 'border-r-2 border-r-gray-800' : ''}
+              `}
+            >
+              <input
+                key={`${rowIndex}-${colIndex}`}
+                type="text"
+                value={userInput[rowIndex][colIndex]}
+                className={`
+                  w-full h-full text-center outline-none
+                  ${cell !== 0 ? 'font-bold bg-gray-100' : 'bg-white'}
+                  ${highlightedCell && highlightedCell.row === rowIndex && highlightedCell.col === colIndex ? 'bg-blue-200' : ''}
+                  ${hintCells.has(`${rowIndex}-${colIndex}`) ? 'bg-yellow-200' : ''}
+                  ${userInput[rowIndex][colIndex] && userInput[rowIndex][colIndex].length > 1 ? 'text-xs' : 'text-lg'}
+                  ${puzzle[rowIndex][colIndex] === 0 ? 'text-blue-600' : ''}
+                `}
+                onChange={(e) => handleInputChange(e, rowIndex, colIndex)}
+                disabled={cell !== 0}
+              />
             </div>
-          ))}
-        </div>
-        <div className="button-container">
-        <button className="button" onClick={handleCheckClick}>Check Solution</button>
-        <button className="button" onClick={() => fetchPuzzle(difficulty)}>New Game</button>
-        <button className="button" onClick={requestHint}>Hint</button>
-      
-      </div>
-        {message && <div className="hint-message">{message}</div>}
-      
-        <Timer isSolved={isSolved} reset={resetTimer} />
-      </div>
-
+          );
+        })}
+      </React.Fragment>
+    ))}
+  </div>
+  <div className="mt-4 flex justify-center space-x-4">
+    <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" onClick={handleCheckClick}>Check Solution</button>
+    <button className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600" onClick={() => fetchPuzzle(difficulty)}>New Game</button>
+    <button className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600" onClick={requestHint}>Hint</button>
+  </div>
+  {message && <div className="mt-4 text-center text-lg font-semibold text-gray-700">{message}</div>}
+  <Timer isSolved={isSolved} reset={resetTimer} />
+</div>
     );
   };
   
