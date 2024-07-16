@@ -12,15 +12,15 @@ const Timer = ({ isSolved, reset }) => {
   }, [isSolved]);
 
   useEffect(() => {
-    if (reset) {
+   
       setSeconds(0);
       setMinutes(0);
       setHours(0);
       setRunning(true);
-    }
   }, [reset]);
 
   useEffect(() => {
+   
     let interval = null;
 
     if (running) {
@@ -41,13 +41,12 @@ const Timer = ({ isSolved, reset }) => {
     } else {
       clearInterval(interval);
     }
-
     return () => clearInterval(interval);
   }, [running]);
 
 
   return (
-    <div className="timer">
+    <div className="timer text-center">
       <span>{String(hours).padStart(2, '0')}:</span>
       <span>{String(minutes).padStart(2, '0')}:</span>
       <span>{String(seconds).padStart(2, '0')}</span>

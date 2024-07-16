@@ -16,9 +16,9 @@ function App() {
     setKey((prevKey) => prevKey + 1);
   };
 
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
+  // const toggleSidebar = () => {
+  //   setSidebarOpen(!sidebarOpen);
+  // };
 
   return (
     <div className="flex h-screen">
