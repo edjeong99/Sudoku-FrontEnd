@@ -5,7 +5,7 @@ import "./App.css";
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [difficulty, setDifficulty] = useState("easy");
+  const [difficulty, setDifficulty] = useState("Easy");
   const [key, setKey] = useState(0); //key is used to refresh.  if same difficulty is clicked, the page is not refreshed
   // so add a new state that is changing to force a refresh game
   const [user, setUser] = useState(null);

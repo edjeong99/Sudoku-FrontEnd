@@ -26,12 +26,12 @@ const Sidebar = ({ onDifficultyChange, user, setUser }) => {
 
   return (
 
-      <div className="flex flex-col h-full lg:w-1/4">
+      <div className="flex flex-col h-full lg:w-1/4 ">
              {/* Menu icon for small screens */}
       <div className="lg:hidden p-4">
         <FaBars className="text-2xl cursor-pointer" onClick={toggleSidebar} />
       </div>
-      <div className={`lg:flex flex-col bg-green-500 text-white p-4 lg:w-full ${isOpen ? 'block' : 'hidden'}`}>
+      <div className={`lg:flex flex-col bg-green-500 text-white p-4 lg:w-full  ${isOpen ? 'block' : 'hidden'}`} style={{ maxWidth: '200px' }}>
         <h2 className="text-lg font-bold mb-4">Menu</h2>
       {user ? ( 
               <div className="mb-4">
@@ -45,19 +45,19 @@ const Sidebar = ({ onDifficultyChange, user, setUser }) => {
     
 
     <button 
-          onClick={() => { onDifficultyChange('easy'); setIsOpen(false); }}
+          onClick={() => { onDifficultyChange('Easy'); setIsOpen(false); }}
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-2 w-full"
         >
           Easy
         </button>
         <button 
-          onClick={() => { onDifficultyChange('medium'); setIsOpen(false); }}
+          onClick={() => { onDifficultyChange('Medium'); setIsOpen(false); }}
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-2 w-full"
         >
           Medium
         </button>
         <button 
-          onClick={() => { onDifficultyChange('hard'); setIsOpen(false); }}
+          onClick={() => { onDifficultyChange('Hard'); setIsOpen(false); }}
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-2 w-full"
         >
           Hard

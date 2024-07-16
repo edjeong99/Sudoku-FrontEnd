@@ -17,7 +17,7 @@ const SudokuBoard = ({difficulty}) => {
     const API_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:8080";
 
     useEffect(() => {
-      fetchPuzzle(difficulty); // Default difficulty
+      fetchPuzzle(); // Default difficulty
     }, [difficulty]);
 
     useEffect(() => {
@@ -73,7 +73,7 @@ const SudokuBoard = ({difficulty}) => {
       let emptyCount = 0;
       const incorrectCells = [];
   
-      console.log(userInput)
+    //  console.log(userInput)
       // Calculate the counts
       for (let i = 0; i < 9; i++) {
         for (let j = 0; j < 9; j++) {
@@ -143,44 +143,37 @@ console.log(hintCells)
 
     return (
       <div className="max-w-lg mx-auto p-4">
-  <div className="text-lg font-semibold mb-4">Difficulty Level: {difficulty}</div>
+        <h1 className="text-3xl font-bold text-center mb-6 text-blue-600">Sudoku Game</h1>
+ 
+  <div className="text-lg font-semibold mb-4">Difficulty : {difficulty}</div>
   <div className="grid grid-cols-9 gap-0 border-2 border-gray-800">
     {puzzle.map((row, rowIndex) => (
-      <React.Fragment key={rowIndex}>
-        {row.map((cell, colIndex) => {
-          const isIncorrect = incorrectCells.some(([i, j]) => i === rowIndex && j === colIndex);
-          return (
-            <div
-              key={colIndex}
-              className={`
-                relative w-10 h-10
-                ${isIncorrect ? 'bg-red-200' : ''}
-                border border-gray-300
-                ${rowIndex % 3 === 0 ? 'border-t-2 border-t-gray-800' : ''}
-                ${colIndex % 3 === 0 ? 'border-l-2 border-l-gray-800' : ''}
-                ${rowIndex === 8 ? 'border-b-2 border-b-gray-800' : ''}
-                ${colIndex === 8 ? 'border-r-2 border-r-gray-800' : ''}
-              `}
-            >
-              <input
-                key={`${rowIndex}-${colIndex}`}
-                type="text"
-                value={userInput[rowIndex][colIndex]}
-                className={`
-                  w-full h-full text-center outline-none
-                  ${cell !== 0 ? 'font-bold bg-gray-100' : 'bg-white'}
-                  ${highlightedCell && highlightedCell.row === rowIndex && highlightedCell.col === colIndex ? 'bg-blue-200' : ''}
-                  ${hintCells.has(`${rowIndex}-${colIndex}`) ? 'bg-yellow-200' : ''}
-                  ${userInput[rowIndex][colIndex] && userInput[rowIndex][colIndex].length > 1 ? 'text-xs' : 'text-lg'}
-                  ${puzzle[rowIndex][colIndex] === 0 ? 'text-blue-600' : ''}
-                `}
-                onChange={(e) => handleInputChange(e, rowIndex, colIndex)}
-                disabled={cell !== 0}
-              />
-            </div>
-          );
-        })}
-      </React.Fragment>
+      row.map((cell, colIndex) => {
+        const isIncorrect = incorrectCells.some(([i, j]) => i === rowIndex && j === colIndex);
+        return (
+          <input
+            key={`${rowIndex}-${colIndex}`}
+            type="text"
+            value={userInput[rowIndex][colIndex]}
+            onChange={(e) => handleInputChange(e, rowIndex, colIndex)}
+            disabled={cell !== 0}
+            className={`
+              w-10 h-10 text-center outline-none
+              border border-gray-300
+              ${rowIndex % 3 === 0 ? 'border-t-2 border-t-gray-800' : ''}
+              ${colIndex % 3 === 0 ? 'border-l-2 border-l-gray-800' : ''}
+              ${rowIndex === 8 ? 'border-b-2 border-b-gray-800' : ''}
+              ${colIndex === 8 ? 'border-r-2 border-r-gray-800' : ''}
+              ${cell !== 0 ? 'font-bold bg-gray-100' : 'bg-white'}
+              ${highlightedCell && highlightedCell.row === rowIndex && highlightedCell.col === colIndex ? 'bg-blue-200' : ''}
+              ${hintCells.has(`${rowIndex}-${colIndex}`) ? 'bg-yellow-200' : ''}
+              ${userInput[rowIndex][colIndex] && userInput[rowIndex][colIndex].length > 1 ? 'text-xs' : 'text-lg'}
+              ${puzzle[rowIndex][colIndex] === 0 ? 'text-blue-600' : ''}
+              ${isIncorrect ? 'bg-red-200' : ''}
+            `}
+          />
+        );
+      })
     ))}
   </div>
   <div className="mt-4 flex justify-center space-x-4">
@@ -188,7 +181,7 @@ console.log(hintCells)
     <button className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600" onClick={() => fetchPuzzle(difficulty)}>New Game</button>
     <button className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600" onClick={requestHint}>Hint</button>
   </div>
-  {message && <div className="mt-4 text-center text-lg font-semibold text-gray-700">{message}</div>}
+  {message && <div className="mt-4 text-center text-lg font-semibold text-gray-700 w-[340px]">{message}</div>}
   <Timer isSolved={isSolved} reset={resetTimer} />
 </div>
     );
