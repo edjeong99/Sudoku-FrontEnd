@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
 import BottomComponent from "./BottomComponent";
 
 const SudokuBoard = ({ difficulty }) => {
@@ -27,20 +26,18 @@ const SudokuBoard = ({ difficulty }) => {
         let emptyCell = 0;
         console.log(response.data);
           const { puzzle, solution } = response.data;
+          const initialUserInput = puzzle.map((row) => // init userInput and count number of empty cell for display stat 
+            row.map((cell) =>{
+              if(cell !== 0)
+                return cell
+              else
+              emptyCell++;
+            return ""
+          })); 
+          
         setPuzzle(puzzle);
         setSolution(solution);
-        setUserInput(  // init userInput and count number of empty cell for display stat 
-          puzzle.map((row) =>
-            row.map((cell) => {
-              if (cell !== 0) {
-                return cell;
-              }
-              emptyCell++;
-              return "";
-            })
-          )
-        );
-
+        setUserInput(initialUserInput);
         setMessage("");
         setHintCells(new Set()); // Reset hinted cell
         setIsSolved(false); 
@@ -53,29 +50,15 @@ const SudokuBoard = ({ difficulty }) => {
   };
 
   const handleInputChange = (e, row, col, num) => {
-    // console.log(e?.target)
     const value = e ? e.target.value.replace(/[^1-9]/g, "") : num;
-    // console.log(value)
-
     const newBoard = userInput.map((r, rowIndex) =>
       r.map((cell, colIndex) =>
         rowIndex === row && colIndex === col
-          ? value !== ""
-            ? value
-            : ""
+          ? (value !== "" ? value : "")
           : cell
       )
     );
     setUserInput(newBoard);
-
-    // Apply multi-numbers class if input contains multiple digits
-    if (e) {
-      if (value.length > 1) {
-        e.target.classList.add("multi-numbers");
-      } else {
-        e.target.classList.remove("multi-numbers");
-      }
-    }
   };
 
   const handleCheckClick = () => {
@@ -87,8 +70,8 @@ const SudokuBoard = ({ difficulty }) => {
 
     //  console.log(userInput)
     // Calculate the counts
-    for (let i = 0; i < 9; i++) {
-      for (let j = 0; j < 9; j++) {
+    puzzle.forEach((row, i) => {
+      row.forEach((_, j) => {
         const userInputValue = userInput[i][j];
         const solutionValue = solution[i][j];
         const originalValue = puzzle[i][j]; 
@@ -103,22 +86,22 @@ const SudokuBoard = ({ difficulty }) => {
             correctCount++;
           }
         }
-      }
-    }
-    console.log("incorrect cells", incorrectCells[0]);
+      });
+    });
+    
+   
     // Construct the stat and message
-
-    if (wrongCount > 0 || emptyCount > 0) {
-      setStat(
-        `Correct : ${correctCount}     Wrong : ${wrongCount}    Empty : ${emptyCount}`
-      );
-    } else {
+    setStat(
+      `Correct : ${correctCount}     Wrong : ${wrongCount}    Empty : ${emptyCount}`
+    );
+    setIncorrectCells(incorrectCells);
+    if (wrongCount == 0 && emptyCount == 0) {
       setMessage(`COMPLETED!!!  ${correctCount} cells solved.`);
       setIsSolved(true);
     }
 
     // Update state
-    setIncorrectCells(incorrectCells);
+   
   };
 
   const requestHint = async () => {
