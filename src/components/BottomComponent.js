@@ -1,6 +1,6 @@
 import Timer from './Timer';
 
-const BottomComponent = ({ handleCheckClick, fetchPuzzle, requestHint, message, isSolved, resetTimer }) => {
+const BottomComponent = ({ handleCheckClick, fetchPuzzle, requestHint, message, isSolved, resetTimer, stat }) => {
 
     return (
 <>
@@ -11,7 +11,7 @@ const BottomComponent = ({ handleCheckClick, fetchPuzzle, requestHint, message, 
 </div>
 
 <Timer isSolved={isSolved} reset={resetTimer} />
-
+<div className="whitespace-pre mt-4 text-center text-lg font-semibold text-gray-700">{stat}</div>
 {message && <div className="mt-4 text-center text-lg font-semibold text-gray-700 w-[340px]">{message}</div>}
 </>
     )
