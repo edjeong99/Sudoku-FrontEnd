@@ -18,8 +18,9 @@ MongoDB
   # Notes
   Puzzle is initial sudoku.
   Solution is completly filled sudoku.
-  Puzzle and Solution is received from backend when sudoku starts, difficulty is clicked and new game is clicked.
+  Puzzle and Solution is received from backend when 1.sudoku starts, 2.difficulty is clicked and 3.new game is clicked.
 
-  UserInput keeps updated sudoku as users enter input.
+  UserInput has Puzzle + user inputs
 
-  Hint, highlightedCell
+# Testing
+use Jest and React Testing Library
