@@ -98,20 +98,20 @@ const SudokuBoard = ({difficulty}) => {
       // Construct the message
       let message = '';
       if (wrongCount > 0 || emptyCount > 0) {
-        message = `There are `;
+       
         if (wrongCount > 0) {
           message += `${wrongCount} incorrect entries, `;
         }
         if (emptyCount > 0) {
-          message += `${emptyCount} empty box(es), `;
+          message += `${emptyCount} empty box(es) `;
         }
         message += `to solve. Keep trying!`;
       } else {
-        message = 'Puzzle solved correctly!';
+        message = 'COMPLETED!!!';
         setIsSolved(true);
       }
       // Add count of correct cells to the message
-      message += ` You got ${correctCount} cells correct.`;
+      message += ` ${correctCount} cells solved.`;
   
       // Update state
       setIncorrectCells(incorrectCells);
