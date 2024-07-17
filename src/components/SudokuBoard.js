@@ -41,6 +41,7 @@ const SudokuBoard = ({difficulty}) => {
         setHighlightedCell(null); // Reset highlighted cell
         setIsSolved(false); // for timer reset
         setResetTimer(!resetTimer); // for timer reset
+        
       })
       .catch(error => {
         console.error('There was an error fetching the puzzle!', error);
@@ -69,6 +70,7 @@ const SudokuBoard = ({difficulty}) => {
     };
   
     const handleCheckClick = () => {
+      console.log("handleCheckClick")
       let wrongCount = 0;
       let correctCount = 0;
       let emptyCount = 0;
@@ -94,25 +96,17 @@ const SudokuBoard = ({difficulty}) => {
           }
         }
       }
-  
+  console.log("incorrect cells", incorrectCells[0])
       // Construct the message
       let message = '';
       if (wrongCount > 0 || emptyCount > 0) {
-       
-        if (wrongCount > 0) {
-          message += `${wrongCount} incorrect entries, `;
-        }
-        if (emptyCount > 0) {
-          message += `${emptyCount} empty box(es) `;
-        }
-        message += `to solve. Keep trying!`;
-      } else {
-        message = 'COMPLETED!!!';
+          message += `Correct : ${correctCount}  Wrong : ${wrongCount} Empty : ${emptyCount}` 
+        } 
+       else {
+        message = `COMPLETED!!!  ${correctCount} cells solved.`;
         setIsSolved(true);
       }
-      // Add count of correct cells to the message
-      message += ` ${correctCount} cells solved.`;
-  
+       
       // Update state
       setIncorrectCells(incorrectCells);
       setMessage(message);
@@ -122,15 +116,15 @@ const SudokuBoard = ({difficulty}) => {
       try {
         const puzzleForHint = userInput.map(row => row.map(cell => (cell === '' ? 0 : parseInt(cell, 10))));
 
-        console.log(puzzleForHint)
+     //   console.log(puzzleForHint)
         const response = await axios.post(`${API_URL}/hint`, { puzzle: puzzleForHint });
         const hint = response.data;
-        console.log(hint)
+     //   console.log(hint)
         setHint(hint);
         handleInputChange(null, hint.row, hint.col, hint.num.toString())
         setHighlightedCell({ row: hint.row, col: hint.col });
         setHintCells(new Set([...hintCells, `${hint.row}-${hint.col}`] ));
-console.log(hintCells)
+//console.log(hintCells)
 
         setTimeout(() => {
           setHighlightedCell(null);
@@ -165,12 +159,12 @@ console.log(hintCells)
               ${colIndex % 3 === 0 ? 'border-l-2 border-l-gray-800' : ''}
               ${rowIndex === 8 ? 'border-b-2 border-b-gray-800' : ''}
               ${colIndex === 8 ? 'border-r-2 border-r-gray-800' : ''}
-              ${cell !== 0 ? 'font-bold bg-gray-100' : 'bg-white'}
+              ${cell !== 0 ? 'font-bold bg-gray-100' : isIncorrect ? 'bg-red-200': 'bg-white'}
               ${highlightedCell && highlightedCell.row === rowIndex && highlightedCell.col === colIndex ? 'bg-blue-200' : ''}
               ${hintCells.has(`${rowIndex}-${colIndex}`) ? 'bg-yellow-200' : ''}
               ${userInput[rowIndex][colIndex] && userInput[rowIndex][colIndex].length > 1 ? 'text-xs' : 'text-lg'}
               ${puzzle[rowIndex][colIndex] === 0 ? 'text-blue-600' : ''}
-              ${isIncorrect ? 'bg-red-200' : ''}
+            
             `}
           />
         );
