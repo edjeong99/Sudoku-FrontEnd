@@ -4,20 +4,27 @@
  */
 
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import BottomComponent from "./BottomComponent";
 import MiniNumberPad from "./MiniNumberPad";
 import {useIsMobile} from "../hooks/useIsMobile";
+import { BiLoaderAlt } from 'react-icons/bi'; 
 
 const DisplaySudokuBoard = ({ puzzle, userInput, hintCells, selectedCell, incorrectCells, setSelectedCell, handleInputChange,handleNumberSelect }) => {
 
-   
+   console.log(puzzle)
   const isMobile = useIsMobile();
 
     return (
     <>
-      <div  className="grid grid-cols-9 gap-0 border-2 border-gray-800">
-        {puzzle.map((row, rowIndex) =>
+     
+      {!puzzle.length ? (
+        <div className="flex flex-col items-center justify-center h-64 bg-gray-100 rounded-lg">
+         <BiLoaderAlt className="text-6xl text-blue-500 mb-4 animate-spin" />
+          <p className="text-xl text-gray-600">puzzle loading!</p>
+        </div>
+      ) : (
+        
+          <div  className="grid grid-cols-9 gap-0 border-2 border-gray-800">
+         { puzzle.map((row, rowIndex) =>
           row.map((cell, colIndex) => {
             const isIncorrect = incorrectCells.some(
               ([i, j]) => i === rowIndex && j === colIndex
@@ -72,9 +79,10 @@ const DisplaySudokuBoard = ({ puzzle, userInput, hintCells, selectedCell, incorr
             );
           })
         )}
-             
+         </div>
+        )}
+     
       
-      </div>
       {isMobile && <MiniNumberPad handleNumberSelect={handleNumberSelect} />    }
     </>
   );
