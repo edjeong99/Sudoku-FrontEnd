@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import BottomComponent from "./BottomComponent";
+import MiniNumberPad from "./MiniNumberPad";
+import useIsMobile from "../hooks/useIsMobile";
 
 const SudokuBoard = ({ difficulty }) => {
   const [puzzle, setPuzzle] = useState([]); // initial state of sudoku board
@@ -12,7 +14,9 @@ const SudokuBoard = ({ difficulty }) => {
   const [hintCells, setHintCells] = useState(new Set()); // store hint cells
   const [isSolved, setIsSolved] = useState(false); // boolean for sudoku is solved
   const [resetTimer, setResetTimer] = useState(false); // boolean to reset timer
+  const [selectedCell, setSelectedCell] = useState(null);
 
+  const isMobile = useIsMobile();
   const API_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:8080";
 
   useEffect(() => {
@@ -47,6 +51,22 @@ const SudokuBoard = ({ difficulty }) => {
       .catch((error) => {
         console.error("There was an error fetching the puzzle!", error);
       });
+  };
+
+  // const handleCellClick = (rowIndex, colIndex) => {
+  //   if (isMobile && puzzle[rowIndex][colIndex] === 0) {
+  //     setShowMiniPad(true);
+  //   }
+  // };
+  
+  const handleNumberSelect = (number) => {
+    if (selectedCell) {
+      const { rowIndex, colIndex } = selectedCell;
+      let prevVal = userInput[rowIndex][colIndex]
+      let newVal = number === 'x' ? prevVal.slice(0,-1) : prevVal + number.toString()
+      handleInputChange({ target: { value:  newVal } }, rowIndex, colIndex);
+      //setSelectedCell(null);
+    }
   };
 
   const handleInputChange = (e, row, col, num) => {
@@ -146,49 +166,66 @@ const SudokuBoard = ({ difficulty }) => {
       <div className="text-lg font-semibold mb-4">
         Difficulty : {difficulty}
       </div>
-      <div className="grid grid-cols-9 gap-0 border-2 border-gray-800">
+      <div  className="grid grid-cols-9 gap-0 border-2 border-gray-800">
         {puzzle.map((row, rowIndex) =>
           row.map((cell, colIndex) => {
             const isIncorrect = incorrectCells.some(
               ([i, j]) => i === rowIndex && j === colIndex
             );
             return (
-              <input
+              <div
                 key={`${rowIndex}-${colIndex}`}
-                type="text"
-                value={userInput[rowIndex][colIndex]}
-                onChange={(e) => handleInputChange(e, rowIndex, colIndex)}
-                disabled={cell !== 0}
                 className={`
-              w-10 h-10 text-center outline-none
-              border border-gray-300 font-bold
-              ${rowIndex % 3 === 0 ? "border-t-2 border-t-gray-800" : ""}
-              ${colIndex % 3 === 0 ? "border-l-2 border-l-gray-800" : ""}
-              ${rowIndex === 8 ? "border-b-2 border-b-gray-800" : ""}
-              ${colIndex === 8 ? "border-r-2 border-r-gray-800" : ""}
-              ${
-                cell !== 0
-                  ? " bg-gray-100"
-                  : hintCells.has(`${rowIndex}-${colIndex}`)
-                  ? "bg-yellow-200"
-                  : isIncorrect
-                  ? "bg-red-200"
-                  : "bg-white"
-              }
-              ${
-                userInput[rowIndex][colIndex] &&
-                userInput[rowIndex][colIndex].length > 1
-                  ? "text-xs"
-                  : "text-lg"
-              }
-              ${puzzle[rowIndex][colIndex] === 0 ? "text-blue-600" : ""}
-            
-            `}
-              />
+                  w-10 h-10 text-center outline-none
+                  border border-gray-300 font-bold
+                  ${rowIndex % 3 === 0 ? "border-t-2 border-t-gray-800" : ""}
+                  ${colIndex % 3 === 0 ? "border-l-2 border-l-gray-800" : ""}
+                  ${rowIndex === 8 ? "border-b-2 border-b-gray-800" : ""}
+                  ${colIndex === 8 ? "border-r-2 border-r-gray-800" : ""}
+                  ${ // decide background color - cliecked, wrong, hint, etc
+                    cell !== 0
+                      ? " bg-gray-100"
+                      : (selectedCell && selectedCell.rowIndex === rowIndex && selectedCell.colIndex === colIndex )
+                        ? 'bg-blue-200' 
+                      : hintCells.has(`${rowIndex}-${colIndex}`)
+                      ? "bg-yellow-200"
+                      : isIncorrect
+                      ? "bg-red-200"
+                      : "bg-white"
+                  }
+                  ${
+                    userInput[rowIndex][colIndex] &&
+                    userInput[rowIndex][colIndex].length > 1
+                      ? "text-xs"
+                      : "text-lg"
+                  }
+                  ${puzzle[rowIndex][colIndex] === 0 ? "text-blue-600" : ""}
+                  flex items-center justify-center 
+                   ${isMobile ? 'cursor-pointer' : ''}
+                `}
+                onClick={() => setSelectedCell({ rowIndex, colIndex })}
+              >
+               {isMobile ? (
+                  userInput[rowIndex][colIndex] || (cell !== 0 ? cell : '')
+                ) : (
+                  <input
+                    type="text"
+                    value={userInput[rowIndex][colIndex]}
+                    onChange={(e) => handleInputChange(e, rowIndex, colIndex)}
+                    disabled={cell !== 0}
+                    className="w-full h-full text-center outline-none bg-transparent"
+                  />
+                )}
+              </div>
             );
           })
         )}
       </div>
+      {isMobile && (
+        <div className="mt-4 mb-4 w-full">
+          <MiniNumberPad onNumberSelect={handleNumberSelect} />
+        </div>
+      )}
       <BottomComponent
         handleCheckClick={handleCheckClick}
         fetchPuzzle={fetchPuzzle}
