@@ -1,8 +1,8 @@
 const MiniNumberPad = ({ onNumberSelect }) => {
     const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 'x'];
     
-    return (
-        <div className="flex justify-center">
+    return ( 
+        <div className=" mt-4 mb-4 w-full flex justify-center">
 
         <div className="grid grid-cols-5 gap-1 bg-zinc-200 p-2 rounded-lg shadow-lg  max-w-[300px] ">
         {numbers.map((num) => (

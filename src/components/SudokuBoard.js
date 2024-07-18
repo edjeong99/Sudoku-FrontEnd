@@ -53,12 +53,7 @@ const SudokuBoard = ({ difficulty }) => {
       });
   };
 
-  // const handleCellClick = (rowIndex, colIndex) => {
-  //   if (isMobile && puzzle[rowIndex][colIndex] === 0) {
-  //     setShowMiniPad(true);
-  //   }
-  // };
-  
+ 
   const handleNumberSelect = (number) => {
     if (selectedCell) {
       const { rowIndex, colIndex } = selectedCell;
@@ -221,11 +216,9 @@ const SudokuBoard = ({ difficulty }) => {
           })
         )}
       </div>
-      {isMobile && (
-        <div className="mt-4 mb-4 w-full">
-          <MiniNumberPad onNumberSelect={handleNumberSelect} />
-        </div>
-      )}
+     
+      {isMobile && <MiniNumberPad onNumberSelect={handleNumberSelect} />    
+      }
       <BottomComponent
         handleCheckClick={handleCheckClick}
         fetchPuzzle={fetchPuzzle}
