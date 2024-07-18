@@ -1,4 +1,4 @@
-const MiniNumberPad = ({ onNumberSelect }) => {
+const MiniNumberPad = ({ handleNumberSelect }) => {
     const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 'x'];
     
     return ( 
@@ -12,7 +12,7 @@ const MiniNumberPad = ({ onNumberSelect }) => {
                          ${num === 'x'? "bg-red-400" : "bg-lime-200"} 
                     `}
            
-            onClick={() => onNumberSelect(num)}
+            onClick={() => handleNumberSelect(num)}
           >
             {num}
           </button>
