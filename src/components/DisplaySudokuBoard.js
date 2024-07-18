@@ -35,12 +35,14 @@ const DisplaySudokuBoard = ({ puzzle, userInput, hintCells, selectedCell, incorr
                   ${ // decide background color - cliecked, wrong, hint, etc
                     cell !== 0
                       ? " bg-gray-100"
-                      : (selectedCell && selectedCell.rowIndex === rowIndex && selectedCell.colIndex === colIndex )
+                      :   isIncorrect
+                      ? "bg-red-200"
+                      :
+                      (selectedCell && selectedCell.rowIndex === rowIndex && selectedCell.colIndex === colIndex )
                         ? 'bg-blue-200' 
                       : hintCells.has(`${rowIndex}-${colIndex}`)
                       ? "bg-yellow-200"
-                      : isIncorrect
-                      ? "bg-red-200"
+                     
                       : "bg-white"
                   }
                   ${
@@ -73,7 +75,7 @@ const DisplaySudokuBoard = ({ puzzle, userInput, hintCells, selectedCell, incorr
              
       
       </div>
-      {isMobile && <MiniNumberPad onNumberSelect={handleNumberSelect} />    }
+      {isMobile && <MiniNumberPad handleNumberSelect={handleNumberSelect} />    }
     </>
   );
 };

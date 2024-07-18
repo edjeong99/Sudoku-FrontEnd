@@ -24,17 +24,21 @@ const Sidebar = ({ onDifficultyChange, user, setUser }) => {
   };
 
   return (
-    <div className="flex flex-col h-full lg:w-1/4 ">
+    <div className="relative h-full ">
       {/* Menu icon for small screens */}
-      <div className={`!isMobile ? "hidden" :"" "p-4"`}>
-        <FaBars className="text-2xl cursor-pointer" onClick={toggleSidebar} />
-      </div>
-      <div
-        className={`lg:flex flex-col bg-green-500 text-white p-4 lg:w-full  ${
-          (isOpen || !isMobile )? "block" : "hidden"
-        }`}
-        style={{ maxWidth: "200px" }}
-      >
+      {isMobile && (
+        <div className="p-4 fixed top-0 left-0 z-50">
+          <FaBars className="text-2xl cursor-pointer" onClick={toggleSidebar} />
+        </div>
+      )}
+     <div
+        className={`
+          fixed top-0 left-0 h-full bg-green-500 text-white p-4 
+          transition-transform duration-300 ease-in-out
+          ${isMobile ? 'w-64 z-40' : 'w-1/4 max-w-[200px]'}
+          ${isMobile && !isOpen ? '-translate-x-full' : 'translate-x-0'}
+        `}
+        >
         <h2 className="text-lg font-bold mb-4">Menu</h2>
         {user ? (
           <div className="mb-4">
@@ -80,6 +84,12 @@ const Sidebar = ({ onDifficultyChange, user, setUser }) => {
 
         {/* {!user ? <AuthComponent setUser={setUser} /> : <></>} */}
       </div>
+      {isMobile && isOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-30"
+          onClick={toggleSidebar}
+        ></div>
+      )}
     </div>
   );
 };
