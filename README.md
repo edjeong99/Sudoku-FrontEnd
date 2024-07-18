@@ -1,4 +1,4 @@
-# Sudoko 2024
+# Sudoko3.com
 
 This is the front-End part of personal project to build and deploy Sudoko puzzle.
 1st step is making a high quality puzzle and deploy using AWS.
@@ -24,3 +24,7 @@ MongoDB
 
 # Testing
 use Jest and React Testing Library
+
+# AWS Amplify
+Deployed using AWS Amplified.
+Manage domain using AWS Route53
