@@ -9,6 +9,7 @@ import Modal from "../util/modal.js";
 //import { createUserProfile, getUserProfile } from '../util/userProfile';
 import AuthComponent from "./AuthComponent";
 import { FaBars } from "react-icons/fa";
+import { useIsMobile } from '../hooks/useIsMobile';
 
 const Sidebar = ({ onDifficultyChange, user, setUser }) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -16,7 +17,8 @@ const Sidebar = ({ onDifficultyChange, user, setUser }) => {
   const [password, setPassword] = useState("");
 
   const [isOpen, setIsOpen] = useState(false);
-
+  const isMobile = useIsMobile();
+  
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
@@ -24,12 +26,12 @@ const Sidebar = ({ onDifficultyChange, user, setUser }) => {
   return (
     <div className="flex flex-col h-full lg:w-1/4 ">
       {/* Menu icon for small screens */}
-      <div className="lg:hidden p-4">
+      <div className={`!isMobile ? "hidden" :"" "p-4"`}>
         <FaBars className="text-2xl cursor-pointer" onClick={toggleSidebar} />
       </div>
       <div
         className={`lg:flex flex-col bg-green-500 text-white p-4 lg:w-full  ${
-          isOpen ? "block" : "hidden"
+          (isOpen || !isMobile )? "block" : "hidden"
         }`}
         style={{ maxWidth: "200px" }}
       >
@@ -76,7 +78,7 @@ const Sidebar = ({ onDifficultyChange, user, setUser }) => {
           Hard
         </button>
 
-        {!user ? <AuthComponent setUser={setUser} /> : <></>}
+        {/* {!user ? <AuthComponent setUser={setUser} /> : <></>} */}
       </div>
     </div>
   );

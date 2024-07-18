@@ -1,6 +1,12 @@
+/******
+ * SUdokuBoard handles thw whole board and functionalities.
+ * displaying is delegated to other components
+ */
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import BottomComponent from "./BottomComponent";
+import DisplaySudokuBoard from "./DisplaySudokuBoard";
 
 const SudokuBoard = ({ difficulty }) => {
   const [puzzle, setPuzzle] = useState([]); // initial state of sudoku board
@@ -8,10 +14,11 @@ const SudokuBoard = ({ difficulty }) => {
   const [userInput, setUserInput] = useState([]); // updated sudoku board with user input
   const [message, setMessage] = useState(""); // display appropriate message
   const [stat, setStat] = useState(""); // show number of correct, wrong, empty cell
-  const [incorrectCells, setIncorrectCells] = useState([]); // array of incorrect cells when 'check' button is cliced
   const [hintCells, setHintCells] = useState(new Set()); // store hint cells
   const [isSolved, setIsSolved] = useState(false); // boolean for sudoku is solved
   const [resetTimer, setResetTimer] = useState(false); // boolean to reset timer
+  const [incorrectCells, setIncorrectCells] = useState([]); // array of incorrect cells when 'check' button is cliced
+  const [selectedCell, setSelectedCell] = useState(null);
 
   const API_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:8080";
 
@@ -47,6 +54,17 @@ const SudokuBoard = ({ difficulty }) => {
       .catch((error) => {
         console.error("There was an error fetching the puzzle!", error);
       });
+  };
+
+ 
+  const handleNumberSelect = (number) => {
+    if (selectedCell) {
+      const { rowIndex, colIndex } = selectedCell;
+      let prevVal = userInput[rowIndex][colIndex]
+      let newVal = number === 'x' ? prevVal.slice(0,-1) : prevVal + number.toString()
+      handleInputChange({ target: { value:  newVal } }, rowIndex, colIndex);
+      //setSelectedCell(null);
+    }
   };
 
   const handleInputChange = (e, row, col, num) => {
@@ -146,49 +164,18 @@ const SudokuBoard = ({ difficulty }) => {
       <div className="text-lg font-semibold mb-4">
         Difficulty : {difficulty}
       </div>
-      <div className="grid grid-cols-9 gap-0 border-2 border-gray-800">
-        {puzzle.map((row, rowIndex) =>
-          row.map((cell, colIndex) => {
-            const isIncorrect = incorrectCells.some(
-              ([i, j]) => i === rowIndex && j === colIndex
-            );
-            return (
-              <input
-                key={`${rowIndex}-${colIndex}`}
-                type="text"
-                value={userInput[rowIndex][colIndex]}
-                onChange={(e) => handleInputChange(e, rowIndex, colIndex)}
-                disabled={cell !== 0}
-                className={`
-              w-10 h-10 text-center outline-none
-              border border-gray-300 font-bold
-              ${rowIndex % 3 === 0 ? "border-t-2 border-t-gray-800" : ""}
-              ${colIndex % 3 === 0 ? "border-l-2 border-l-gray-800" : ""}
-              ${rowIndex === 8 ? "border-b-2 border-b-gray-800" : ""}
-              ${colIndex === 8 ? "border-r-2 border-r-gray-800" : ""}
-              ${
-                cell !== 0
-                  ? " bg-gray-100"
-                  : hintCells.has(`${rowIndex}-${colIndex}`)
-                  ? "bg-yellow-200"
-                  : isIncorrect
-                  ? "bg-red-200"
-                  : "bg-white"
-              }
-              ${
-                userInput[rowIndex][colIndex] &&
-                userInput[rowIndex][colIndex].length > 1
-                  ? "text-xs"
-                  : "text-lg"
-              }
-              ${puzzle[rowIndex][colIndex] === 0 ? "text-blue-600" : ""}
-            
-            `}
-              />
-            );
-          })
-        )}
-      </div>
+      <DisplaySudokuBoard 
+        puzzle={puzzle}
+        userInput={userInput}
+        hintCells={hintCells}
+        selectedCell={selectedCell}
+        incorrectCells={incorrectCells} 
+        setSelectedCell={setSelectedCell}
+        handleInputChange={handleInputChange}
+        handleNumberSelect={handleNumberSelect}
+      />
+     
+ 
       <BottomComponent
         handleCheckClick={handleCheckClick}
         fetchPuzzle={fetchPuzzle}
