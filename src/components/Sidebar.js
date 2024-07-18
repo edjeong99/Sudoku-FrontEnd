@@ -78,7 +78,7 @@ const Sidebar = ({ onDifficultyChange, user, setUser }) => {
           Hard
         </button>
 
-        {!user ? <AuthComponent setUser={setUser} /> : <></>}
+        {/* {!user ? <AuthComponent setUser={setUser} /> : <></>} */}
       </div>
     </div>
   );
