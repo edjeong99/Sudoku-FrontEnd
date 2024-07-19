@@ -9,10 +9,12 @@ const AuthComponent = ({ setUser }) => {
   const [message, setMessage] = useState('');
 
   const handleSignUp = async () => {
+    console.log(email, password, displayName)
     try {
       const response = await signUp(email, password, displayName);
-      setUser(response.result);
-      setMessage(`Sign-up successful! Welcome, ${response.result.email}`);
+      console.log(response);
+      setUser({email, displayName});
+      setMessage(`Sign-up successful! Welcome, ${displayName}`);
     } catch (error) {
       setMessage('Sign-up failed');
     }
@@ -29,8 +31,8 @@ const AuthComponent = ({ setUser }) => {
   };
 
   return (
-    <div className="mt-4">
-    <h3 className="text-lg font-semibold mb-4 text-white">
+    <div className="mt-10">
+    <h3 className="text-lg font-semibold mb-4 text-black text-center">
       {isSignUp ? 'Sign Up' : 'Sign In'}
     </h3>
     <input
@@ -68,7 +70,7 @@ const AuthComponent = ({ setUser }) => {
     >
       {isSignUp ? 'Already have an account? Sign In' : 'Need an account? Sign Up'}
     </button>
-    <p className="text-sm text-white">{message}</p>
+    <p className="text-sm text-black">{message}</p>
   </div>
   );
 };

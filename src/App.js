@@ -8,7 +8,6 @@ function App() {
   const [difficulty, setDifficulty] = useState("Easy");
   const [key, setKey] = useState(0); //key is used to refresh.  if same difficulty is clicked, the page is not refreshed
   // so add a new state that is changing to force a refresh game
-  const [user, setUser] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const openPopup = () => setIsPopupOpen(true);
@@ -26,8 +25,6 @@ function App() {
       <Sidebar
         sidebarOpen={sidebarOpen}
         onDifficultyChange={changeDifficulty}
-        user={user}
-        setUser={setUser}
         onOpenPopup={openPopup} 
       />
  <HowToPlay isOpen={isPopupOpen} onClose={closePopup} />
