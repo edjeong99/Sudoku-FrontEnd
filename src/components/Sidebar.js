@@ -10,13 +10,15 @@ import Modal from "../util/modal.js";
 import AuthComponent from "./AuthComponent";
 import { FaBars } from "react-icons/fa";
 import { useIsMobile } from '../hooks/useIsMobile';
+import HowToPlay from "./HowToPlay.js";
 
-const Sidebar = ({ onDifficultyChange, user, setUser }) => {
+const Sidebar = ({ onDifficultyChange, user, setUser, onOpenPopup }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
   const isMobile = useIsMobile();
   
   const toggleSidebar = () => {
@@ -33,13 +35,13 @@ const Sidebar = ({ onDifficultyChange, user, setUser }) => {
       )}
      <div
         className={`
-          fixed top-0 left-0 h-full bg-green-500 text-white p-4 
+          fixed top-0 left-0 h-full bg-lime-200 text-white p-4 
           transition-transform duration-300 ease-in-out
           ${isMobile ? 'w-64 z-40' : 'w-1/4 max-w-[200px]'}
           ${isMobile && !isOpen ? '-translate-x-full' : 'translate-x-0'}
         `}
         >
-        <h2 className="text-lg font-bold mb-4">Menu</h2>
+        <h2 className="text-lg font-bold text-black mb-4">Menu</h2>
         {user ? (
           <div className="mb-4">
             <h3 className="text-lg mb-2">
@@ -83,13 +85,22 @@ const Sidebar = ({ onDifficultyChange, user, setUser }) => {
         </button>
 
         {/* {!user ? <AuthComponent setUser={setUser} /> : <></>} */}
+     
+        <button 
+         className="text-black bg-yellow-200 hover:bg-yellow-500 font-bold py-2 px-4 rounded mb-2 w-full mt-5"
+         onClick={onOpenPopup}
+         >
+          How to play
+        </button>
       </div>
+    
       {isMobile && isOpen && (
         <div 
           className="fixed inset-0 bg-black bg-opacity-50 z-30"
           onClick={toggleSidebar}
         ></div>
       )}
+       
     </div>
   );
 };
