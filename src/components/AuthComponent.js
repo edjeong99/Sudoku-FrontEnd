@@ -23,7 +23,11 @@ const AuthComponent = ({ setUser }) => {
   const handleSignIn = async () => {
     try {
       const response = await signIn(email, password);
-      setUser(response.result);
+      setUser({displayName : response.displayName, email : response.email, uid :response.uid});
+      console.log(response.displayName, response.email, response.uid)
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('userId', response.uid);
+      
       setMessage(`Sign-in successful! Welcome back, ${response.result.email}`);
     } catch (error) {
       setMessage('Sign-in failed');
@@ -32,7 +36,7 @@ const AuthComponent = ({ setUser }) => {
 
   return (
     <div className="mt-10">
-    <h3 className="text-lg font-semibold mb-4 text-black text-center">
+    <h3 className="text-lg mb-4 text-black text-center font-bold">
       {isSignUp ? 'Sign Up' : 'Sign In'}
     </h3>
     <input

@@ -78,6 +78,21 @@ const SudokuBoard = ({ difficulty }) => {
     );
     setUserInput(newBoard);
   };
+const saveTime = async () => {
+  // This function is called when the game is solved
+  let time = Date.now();
+  const duration = Math.floor((time) / 1000); // Time in seconds
+
+  try {
+    await axios.post(`${API_URL}/user/saveSudokuTime`, { time: duration }, {
+      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+    });
+    console.log('Sudoku time saved successfully');
+  } catch (error) {
+    console.error('Error saving Sudoku time:', error);
+  }
+};
+
 
   const handleCheckClick = () => {
     console.log("handleCheckClick");
@@ -116,9 +131,10 @@ const SudokuBoard = ({ difficulty }) => {
     if (wrongCount == 0 && emptyCount == 0) {
       setMessage(`COMPLETED!!!  ${correctCount} cells solved.`);
       setIsSolved(true);
+      saveTime()
     }
 
-    // Update state
+
    
   };
 
@@ -156,7 +172,7 @@ const SudokuBoard = ({ difficulty }) => {
   };
 
   return (
-    <div className="max-w-lg mx-auto p-4">
+    <div className="max-w-lg mx-auto p-4 w-3/4 max-w-96 min-w-64">
       <h1 className="text-3xl font-bold text-center mb-6 text-blue-600">
         Sudoku Game
       </h1>
