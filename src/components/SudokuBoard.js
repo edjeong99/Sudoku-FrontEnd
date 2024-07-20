@@ -80,11 +80,14 @@ const SudokuBoard = ({ difficulty }) => {
   };
 const saveTime = async () => {
   // This function is called when the game is solved
+  let userId = localStorage.getItem('userId');
+  console.log(userId);
+  if(!userId) return;
   let time = Date.now();
   const duration = Math.floor((time) / 1000); // Time in seconds
 
   try {
-    await axios.post(`${API_URL}/user/saveSudokuTime`, { time: duration }, {
+    await axios.post(`${API_URL}/user/saveSudokuTime`, { time: duration, difficulty:difficulty }, {
       headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
     });
     console.log('Sudoku time saved successfully');

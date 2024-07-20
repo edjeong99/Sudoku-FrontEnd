@@ -13,7 +13,10 @@ const AuthComponent = ({ setUser }) => {
     try {
       const response = await signUp(email, password, displayName);
       console.log(response);
-      setUser({email, displayName});
+      setUser({displayName : response.displayName, email : response.email, uid :response.uid});
+      console.log(response.displayName, response.email, response.uid)
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('userId', response.uid);
       setMessage(`Sign-up successful! Welcome, ${displayName}`);
     } catch (error) {
       setMessage('Sign-up failed');
