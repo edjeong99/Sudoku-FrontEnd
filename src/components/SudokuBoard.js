@@ -175,7 +175,7 @@ const saveTime = async () => {
   };
 
   return (
-    <div className="p-4 w-3/4 max-w-96 min-w-64">
+    <div className="p-4 w-3/4 max-w-96 min-w-64 mx-auto">
       <h1 className="text-3xl font-bold text-center mb-6 text-blue-600">
         Sudoku Game
       </h1>
