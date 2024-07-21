@@ -5,12 +5,13 @@
 
 import React, { useEffect, useState } from "react";
 import MiniNumberPad from "./MiniNumberPad";
+import GameTimeChart from './GameTimeChart';
 import {useIsMobile} from "../hooks/useIsMobile";
 import { BiLoaderAlt } from 'react-icons/bi'; 
 
-const DisplaySudokuBoard = ({ puzzle, userInput, hintCells, selectedCell, incorrectCells, setSelectedCell, handleInputChange,handleNumberSelect }) => {
+const DisplaySudokuBoard = ({ puzzle, userInput, hintCells, selectedCell, incorrectCells, setSelectedCell, handleInputChange,handleNumberSelect, chartData, isSolved }) => {
 
-   //console.log(puzzle)
+   console.log(isSolved, chartData)
   const isMobile = useIsMobile();
 
     return (
@@ -21,7 +22,17 @@ const DisplaySudokuBoard = ({ puzzle, userInput, hintCells, selectedCell, incorr
          <BiLoaderAlt className="text-6xl text-blue-500 mb-4 animate-spin" />
           <p className="text-xl text-gray-600">puzzle loading!</p>
         </div>
-      ) : (
+      ) : 
+      isSolved ?(
+        chartData && chartData.allTimes && chartData.allTimes.length > 0 && (
+          <GameTimeChart chartData={chartData} />
+        )
+      )
+
+      
+
+      :
+      (
         
           <div  className="grid grid-cols-9 gap-0 border-2 border-gray-800">
          { puzzle.map((row, rowIndex) =>
@@ -84,6 +95,7 @@ const DisplaySudokuBoard = ({ puzzle, userInput, hintCells, selectedCell, incorr
      
       
       {isMobile && <MiniNumberPad handleNumberSelect={handleNumberSelect} />    }
+
     </>
   );
 };
