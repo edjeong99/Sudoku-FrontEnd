@@ -96,10 +96,13 @@ const handleGameCompleted = async (correctCount) => {
   const duration = Math.floor((endTime - beginTime) / 1000); // Time in seconds
 
   try {
-    await axios.post(`${API_URL}/user/saveSudokuTime`, { time: duration, difficulty:difficulty }, {
+    const response = await axios.post(`${API_URL}/user/saveSudokuTime`, { time: duration, difficulty:difficulty }, {
       headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
     });
-    console.log('Sudoku time saved successfully');
+
+    const { allTimes, message } = response.data;
+    console.log(message);
+console.log(allTimes )
   } catch (error) {
     console.error('Error saving Sudoku time:', error);
   }
