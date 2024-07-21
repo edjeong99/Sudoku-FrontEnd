@@ -21,7 +21,7 @@ const SudokuBoard = ({ difficulty }) => {
   const [selectedCell, setSelectedCell] = useState(null);
 
   const API_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:8080";
-
+  console.log("API_URL is ",API_URL )
   useEffect(() => {
     fetchPuzzle();
   }, [difficulty]);
@@ -175,7 +175,7 @@ const saveTime = async () => {
   };
 
   return (
-    <div className="max-w-lg mx-auto p-4 w-3/4 max-w-96 min-w-64">
+    <div className="p-4 w-3/4 max-w-96 min-w-64">
       <h1 className="text-3xl font-bold text-center mb-6 text-blue-600">
         Sudoku Game
       </h1>
