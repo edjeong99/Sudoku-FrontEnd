@@ -9,50 +9,50 @@ import Modal from "../util/modal.js";
 //import { createUserProfile, getUserProfile } from '../util/userProfile';
 import AuthComponent from "./AuthComponent";
 import { FaBars } from "react-icons/fa";
-import { useIsMobile } from '../hooks/useIsMobile';
+import { useIsMobile } from "../hooks/useIsMobile";
+import HowToPlay from "./HowToPlay.js";
 
-const Sidebar = ({ onDifficultyChange, user, setUser }) => {
+const Sidebar = ({ onDifficultyChange, onOpenPopup }) => {
   const [isLogin, setIsLogin] = useState(true);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
+  const [user, setUser] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const isMobile = useIsMobile();
-  
+
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
 
+const handleLogOut = () => {
+  console.log("Handle Logout")
+  setUser(null)
+  localStorage.removeItem('token');
+  localStorage.removeItem('userId');
+}
   return (
-    <div className="relative h-full ">
+    <div className=" h-full w-1/4 ">
       {/* Menu icon for small screens */}
       {isMobile && (
         <div className="p-4 fixed top-0 left-0 z-50">
           <FaBars className="text-2xl cursor-pointer" onClick={toggleSidebar} />
         </div>
       )}
-     <div
+      <div
         className={`
-          fixed top-0 left-0 h-full bg-green-500 text-white p-4 
+          fixed top-0 left-0 h-full bg-cyan-100 text-white p-4 
           transition-transform duration-300 ease-in-out
-          ${isMobile ? 'w-64 z-40' : 'w-1/4 max-w-[200px]'}
-          ${isMobile && !isOpen ? '-translate-x-full' : 'translate-x-0'}
+          ${isMobile ? "w-64 z-40" : "w-1/4 max-w-[300px] min-w-[200px]"}
+          ${isMobile && !isOpen ? "-translate-x-full" : "translate-x-0"}
         `}
-        >
-        <h2 className="text-lg font-bold mb-4">Menu</h2>
-        {user ? (
-          <div className="mb-4">
-            <h3 className="text-lg mb-2">
-              Welcome, {user?.displayName || user?.email}
-            </h3>
-            <button
-              onClick={() => setUser(null)}
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Logout
-            </button>
-          </div>
-        ) : null}
+      >
+        <div className="mb-4 ">
+          <h3 className="text-lg mb-2 font-bold text-black text-center">
+            Welcome {user ? user?.displayName : ""}
+          </h3>
+        </div>
+
+        <h2 className="text-lg font-bold text-black text-center mb-2 mt-5">
+          Menu
+        </h2>
 
         <button
           onClick={() => {
@@ -82,10 +82,40 @@ const Sidebar = ({ onDifficultyChange, user, setUser }) => {
           Hard
         </button>
 
-        {/* {!user ? <AuthComponent setUser={setUser} /> : <></>} */}
-      </div>
+        <button
+          className="text-black bg-yellow-200 hover:bg-yellow-500 font-bold py-2 px-4 rounded mb-2 w-full mt-5"
+          onClick={onOpenPopup}
+        >
+          How to play
+        </button>
+        {user ? (
+          <button
+            onClick={() => handleLogOut()}
+            size="sm"
+            className="bg-red-100 hover:bg-red-400 text-black font-bold py-2 px-4 rounded mb-2 w-full mt-5"
+          >
+            Log Out
+          </button>
+        ) : (
+          <AuthComponent setUser={setUser} />
+        )}
+
+    <div className="flex items-center justify-between w-full mt-10">
+      <img
+        src="/EDMIKYLogoWhiteBG2.png"
+        alt="Logo"
+        className="w-12 h-12 mr-2"
+      />
+    
+    <span className="text-sm text-gray-700 underline font-bold truncate w-full">
+      edmiky99@gmail.com
+    </span>
+  </div>
+</div>
+      
+
       {isMobile && isOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black bg-opacity-50 z-30"
           onClick={toggleSidebar}
         ></div>
