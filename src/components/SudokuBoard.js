@@ -19,9 +19,12 @@ const SudokuBoard = ({ difficulty }) => {
   const [resetTimer, setResetTimer] = useState(false); // boolean to reset timer
   const [incorrectCells, setIncorrectCells] = useState([]); // array of incorrect cells when 'check' button is cliced
   const [selectedCell, setSelectedCell] = useState(null);
-
+const[beginTime, setBeginTime] = useState(0)
   const API_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:8080";
   console.log("API_URL is ",API_URL )
+
+ 
+
   useEffect(() => {
     fetchPuzzle();
   }, [difficulty]);
@@ -50,6 +53,8 @@ const SudokuBoard = ({ difficulty }) => {
         setIsSolved(false); 
         setResetTimer(!resetTimer); // for timer reset
         setStat("Correct : 0     Wrong : 0    Empty : " + `${emptyCell}`);
+        setBeginTime(Date.now());
+        console.log(beginTime)
       })
       .catch((error) => {
         console.error("There was an error fetching the puzzle!", error);
@@ -78,13 +83,17 @@ const SudokuBoard = ({ difficulty }) => {
     );
     setUserInput(newBoard);
   };
-const saveTime = async () => {
+const handleGameCompleted = async (correctCount) => {
   // This function is called when the game is solved
+  setMessage(`COMPLETED!!!  ${correctCount} cells solved.`);
+  setIsSolved(true);
+  
   let userId = localStorage.getItem('userId');
-  console.log(userId);
+ // console.log(userId);
   if(!userId) return;
-  let time = Date.now();
-  const duration = Math.floor((time) / 1000); // Time in seconds
+  let endTime = Date.now();
+  console.log(beginTime, endTime)
+  const duration = Math.floor((endTime - beginTime) / 1000); // Time in seconds
 
   try {
     await axios.post(`${API_URL}/user/saveSudokuTime`, { time: duration, difficulty:difficulty }, {
@@ -131,10 +140,10 @@ const saveTime = async () => {
       `Correct : ${correctCount}     Wrong : ${wrongCount}    Empty : ${emptyCount}`
     );
     setIncorrectCells(incorrectCells);
+
+    // if game is completed 
     if (wrongCount == 0 && emptyCount == 0) {
-      setMessage(`COMPLETED!!!  ${correctCount} cells solved.`);
-      setIsSolved(true);
-      saveTime()
+      handleGameCompleted(correctCount)
     }
 
 

@@ -10,7 +10,7 @@ import { BiLoaderAlt } from 'react-icons/bi';
 
 const DisplaySudokuBoard = ({ puzzle, userInput, hintCells, selectedCell, incorrectCells, setSelectedCell, handleInputChange,handleNumberSelect }) => {
 
-   console.log(puzzle)
+   //console.log(puzzle)
   const isMobile = useIsMobile();
 
     return (
