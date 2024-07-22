@@ -19,9 +19,15 @@ const SudokuBoard = ({ difficulty }) => {
   const [resetTimer, setResetTimer] = useState(false); // boolean to reset timer
   const [incorrectCells, setIncorrectCells] = useState([]); // array of incorrect cells when 'check' button is cliced
   const [selectedCell, setSelectedCell] = useState(null);
+const[beginTime, setBeginTime] = useState(0);
+const [chartData, setChartData] = useState({ allTimes: [], playerTime: null });
+
 
   const API_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:8080";
   console.log("API_URL is ",API_URL )
+
+ 
+
   useEffect(() => {
     fetchPuzzle();
   }, [difficulty]);
@@ -50,6 +56,8 @@ const SudokuBoard = ({ difficulty }) => {
         setIsSolved(false); 
         setResetTimer(!resetTimer); // for timer reset
         setStat("Correct : 0     Wrong : 0    Empty : " + `${emptyCell}`);
+        setBeginTime(Date.now());
+        console.log(beginTime)
       })
       .catch((error) => {
         console.error("There was an error fetching the puzzle!", error);
@@ -78,24 +86,39 @@ const SudokuBoard = ({ difficulty }) => {
     );
     setUserInput(newBoard);
   };
-const saveTime = async () => {
+
+/*  
+saves users game time.  retrieve all completed times for this difficulty
+*/
+const handleGameCompleted = (correctCount) => {
   // This function is called when the game is solved
+  setMessage(`COMPLETED!!!  ${correctCount} cells solved.`);
+  setIsSolved(true);
+  
   let userId = localStorage.getItem('userId');
-  console.log(userId);
+ // console.log(userId);
   if(!userId) return;
-  let time = Date.now();
-  const duration = Math.floor((time) / 1000); // Time in seconds
+  let playTime = Math.floor((Date.now() - beginTime)/1000);
 
-  try {
-    await axios.post(`${API_URL}/user/saveSudokuTime`, { time: duration, difficulty:difficulty }, {
+  const duration = Math.floor(playTime); // Time in seconds
+
+
+ axios
+ .post(`${API_URL}/user/saveSudokuTime`, { time: duration, difficulty:difficulty }, {
       headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-    });
-    console.log('Sudoku time saved successfully');
-  } catch (error) {
-    console.error('Error saving Sudoku time:', error);
-  }
-};
+    })
+  .then((response) => {
+       const { allTimes, message } = response.data;
+    console.log(message);
+console.log(allTimes );
 
+setChartData({allTimes:allTimes, playerTime:playTime})
+})
+  .catch ((error) => {
+    console.error('Error saving Sudoku time:', error);
+  
+});
+};
 
   const handleCheckClick = () => {
     console.log("handleCheckClick");
@@ -131,10 +154,10 @@ const saveTime = async () => {
       `Correct : ${correctCount}     Wrong : ${wrongCount}    Empty : ${emptyCount}`
     );
     setIncorrectCells(incorrectCells);
+
+    // if game is completed 
     if (wrongCount == 0 && emptyCount == 0) {
-      setMessage(`COMPLETED!!!  ${correctCount} cells solved.`);
-      setIsSolved(true);
-      saveTime()
+      handleGameCompleted(correctCount)
     }
 
 
@@ -175,7 +198,7 @@ const saveTime = async () => {
   };
 
   return (
-    <div className="p-4 w-3/4 max-w-96 min-w-64">
+    <div className="p-4 w-3/4 max-w-96 min-w-64 mx-auto">
       <h1 className="text-3xl font-bold text-center mb-6 text-blue-600">
         Sudoku Game
       </h1>
@@ -192,6 +215,8 @@ const saveTime = async () => {
         setSelectedCell={setSelectedCell}
         handleInputChange={handleInputChange}
         handleNumberSelect={handleNumberSelect}
+        chartData={chartData}
+        isSolved={isSolved}
       />
      
  

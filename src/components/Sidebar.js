@@ -29,10 +29,11 @@ const handleLogOut = () => {
   localStorage.removeItem('userId');
 }
   return (
-    <div className=" h-full w-1/4 ">
+    <div className={` h-full 
+       ${isMobile ? '' : "w-1/4"} `}>
       {/* Menu icon for small screens */}
       {isMobile && (
-        <div className="p-4 fixed top-0 left-0 z-50">
+        <div className="p-4 fixed top-0 left-0 z-50 w-3">
           <FaBars className="text-2xl cursor-pointer" onClick={toggleSidebar} />
         </div>
       )}
