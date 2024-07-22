@@ -6,7 +6,19 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 
 const GameTimeChart = ({ chartData }) => {
   const [chartDisplayData, setChartDisplayData] = useState(null);
-  
+  const replaceZeroWithPrevious = (data) => {
+    const replacedData = [...data];
+    let lastNonZero = null;
+    for (let i = 0; i < data.length; i++) {
+      if (data[i] === 0) {
+        replacedData[i] = lastNonZero !== null ? lastNonZero : data[i];
+      } else {
+        lastNonZero = data[i];
+      }
+    }
+    return replacedData;
+  };
+
   useEffect(() => {
     if (chartData && chartData.allTimes && chartData.playerTime) {
       const { allTimes, playerTime } = chartData;
@@ -16,19 +28,22 @@ const GameTimeChart = ({ chartData }) => {
       
       // Create an array from 0 to maxTime
       const timeRange = Array.from({ length: maxTime + 1 }, (_, i) => i);
-      
-      // Count frequency of each completion time
-      const timeFrequency = allTimes.reduce((acc, time) => {
-        acc[time] = (acc[time] || 0) + 1;
-        return acc;
-      }, {});
+          // Count frequency of each completion time
+          const timeFrequency = allTimes.reduce((acc, time) => {
+            acc[time] = (acc[time] || 0) + 1;
+            return acc;
+          }, {});
+          
+       const allPlayersData = replaceZeroWithPrevious(timeRange.map(time => timeFrequency[time] || 0));
+
+  
       
       setChartDisplayData({
         labels: timeRange,
         datasets: [
           {
             label: 'All Players',
-            data: timeRange.map(time => timeFrequency[time] || 0),
+            data: allPlayersData,
             borderColor: 'rgb(75, 192, 192)',
             backgroundColor: 'rgba(75, 192, 192, 0.5)',
             tension: 0.1,
@@ -95,9 +110,9 @@ const GameTimeChart = ({ chartData }) => {
   if (!chartDisplayData) return <div>Loading...</div>;
 
   return (
-    <div>
+    <div max-w-full>
       <h2>Game Completion Times Distribution</h2>
-      <Line data={chartDisplayData} options={options} />
+      <Line data={chartDisplayData} options={options} height={350}  />
     </div>
   );
 };
