@@ -26,7 +26,6 @@ const handleLogOut = () => {
   console.log("Handle Logout")
   setUser(null)
   localStorage.removeItem('token');
-  localStorage.removeItem('userId');
 }
   return (
     <div className={` h-full 

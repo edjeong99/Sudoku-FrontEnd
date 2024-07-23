@@ -26,10 +26,9 @@ const AuthComponent = ({ setUser }) => {
   const handleSignIn = async () => {
     try {
       const response = await signIn(email, password);
-      setUser({displayName : response.displayName, email : response.email, uid :response.uid});
-      console.log(response.displayName, response.email, response.uid)
+      console.log(response)
+      setUser(response.user);
       localStorage.setItem('token', response.token);
-      localStorage.setItem('userId', response.uid);
       
       setMessage(`Sign-in successful! Welcome back, ${response.result.email}`);
     } catch (error) {

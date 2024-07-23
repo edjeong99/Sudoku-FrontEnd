@@ -154,9 +154,9 @@ saves users game time.  retrieve all completed times for this difficulty
     const duration = Math.floor(playTime); // Time in seconds
     setChartData({ allTimes: allTimes, playerTime: playTime });
 
-    let userId = localStorage.getItem("userId");
+    let token = localStorage.getItem("token");
     // console.log(userId);
-    if (!userId) return;
+    if (!token) return;
 
     axios
       .post(
