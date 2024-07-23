@@ -140,7 +140,7 @@ console.log(timeRange)
   return (
     <div max-w-full>
       <h2>Game Completion Times Distribution</h2>
-      <Line data={chartDisplayData} options={options} height={300} />
+      <Line data={chartDisplayData} options={options} height={250} />
     </div>
   );
 };

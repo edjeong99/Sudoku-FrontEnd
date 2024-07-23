@@ -24,7 +24,7 @@ const SudokuBoard = ({ difficulty }) => {
     allTimes: [],
     playerTime: null,
   });
-  const [allTimes, setAllTimes] = useState([])
+  const [allTimes, setAllTimes] = useState([]);
 
   const API_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:8080";
   console.log("API_URL is ", API_URL);
@@ -34,7 +34,7 @@ const SudokuBoard = ({ difficulty }) => {
     getAllTimes();
   }, [difficulty]);
 
-  const getAllTimes = () =>{
+  const getAllTimes = () => {
     const replaceZeroWithPrevious = (data) => {
       const replacedData = [...data];
       let lastNonZero = null;
@@ -47,26 +47,26 @@ const SudokuBoard = ({ difficulty }) => {
       }
       return replacedData;
     };
-  
- 
-        
-        // Find the max completion time
-        const maxTime = Math.max(...allTimes);
-        
-        // Create an array from 0 to maxTime
-        const timeRange = Array.from({ length: maxTime + 1 }, (_, i) => i);
-            // Count frequency of each completion time
-            const timeFrequency = allTimes.reduce((acc, time) => {
-              acc[time] = (acc[time] || 0) + 1;
-              return acc;
-            }, {});
-            
-      const allPlayersData = replaceZeroWithPrevious(timeRange.map(time => timeFrequency[time] || 0));
-  
-     axios
+
+    // Find the max completion time
+    const maxTime = Math.max(...allTimes);
+
+    // Create an array from 0 to maxTime
+    const timeRange = Array.from({ length: maxTime + 1 }, (_, i) => i);
+    // Count frequency of each completion time
+    const timeFrequency = allTimes.reduce((acc, time) => {
+      acc[time] = (acc[time] || 0) + 1;
+      return acc;
+    }, {});
+
+    const allPlayersData = replaceZeroWithPrevious(
+      timeRange.map((time) => timeFrequency[time] || 0)
+    );
+
+    axios
       .get(`${API_URL}/getAllTimes`)
       .then((response) => {
-        let times = (response.data.allTimes);
+        let times = response.data.allTimes;
         const maxTime = Math.max(...times);
         const timeRange = Array.from({ length: maxTime + 1 }, (_, i) => i);
         // Count frequency of each completion time
@@ -74,21 +74,23 @@ const SudokuBoard = ({ difficulty }) => {
           acc[time] = (acc[time] || 0) + 1;
           return acc;
         }, {});
-          const allPlayersData = replaceZeroWithPrevious(timeRange.map(time => timeFrequency[time] || 0));
-          setAllTimes(allPlayersData)
-        console.log(allPlayersData)
-        })
+        const allPlayersData = replaceZeroWithPrevious(
+          timeRange.map((time) => timeFrequency[time] || 0)
+        );
+        setAllTimes(allPlayersData);
+        //    console.log(allPlayersData)
+      })
       .catch((error) => {
         console.error("There was an error fetching the allTImes!", error);
       });
-  }
+  };
 
   const fetchPuzzle = () => {
     axios
       .get(`${API_URL}/generate?difficulty=${difficulty}`)
       .then((response) => {
         let emptyCell = 0;
-        console.log(response.data);
+        //    console.log(response.data);
         const { puzzle, solution } = response.data;
         const initialUserInput = puzzle.map(
           (
@@ -110,7 +112,6 @@ const SudokuBoard = ({ difficulty }) => {
         setResetTimer(!resetTimer); // for timer reset
         setStat("Correct : 0     Wrong : 0    Empty : " + `${emptyCell}`);
         setBeginTime(Date.now());
-        console.log(beginTime);
       })
       .catch((error) => {
         console.error("There was an error fetching the puzzle!", error);
@@ -156,7 +157,7 @@ saves users game time.  retrieve all completed times for this difficulty
     let userId = localStorage.getItem("userId");
     // console.log(userId);
     if (!userId) return;
-   
+
     axios
       .post(
         `${API_URL}/user/saveSudokuTime`,
@@ -168,8 +169,6 @@ saves users game time.  retrieve all completed times for this difficulty
       .then((response) => {
         const { message } = response.data;
         console.log(message);
-       
-        
       })
       .catch((error) => {
         console.error("Error saving Sudoku time:", error);
@@ -177,13 +176,11 @@ saves users game time.  retrieve all completed times for this difficulty
   };
 
   const handleCheckClick = () => {
-    console.log("handleCheckClick");
     let wrongCount = 0;
     let correctCount = 0;
     let emptyCount = 0;
     const incorrectCells = [];
 
-    //  console.log(userInput)
     // Calculate the counts
     puzzle.forEach((row, i) => {
       row.forEach((_, j) => {
@@ -233,17 +230,15 @@ saves users game time.  retrieve all completed times for this difficulty
         setMessage("No Empty cells to give a hint!");
         return;
       }
-      console.log(puzzleForHint);
+
       const response = await axios.post(`${API_URL}/hint`, {
         puzzle: puzzleForHint,
       });
       const hint = response.data;
-      console.log(hint);
 
       handleInputChange(null, hint.row, hint.col, hint.num.toString());
 
       setHintCells(new Set([...hintCells, `${hint.row}-${hint.col}`]));
-      console.log(hintCells);
     } catch (error) {
       console.error("Error fetching hint!", error);
       setMessage("Error fetching hint!");

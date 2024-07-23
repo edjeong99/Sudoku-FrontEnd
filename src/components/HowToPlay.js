@@ -9,8 +9,13 @@ return(
     className="fixed inset-0 bg-black bg-opacity-50 z-40"
     onClick={onClose}
   ></div>
-  <div className="fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3/4 max-w-2xl bg-white p-6 rounded-lg shadow-xl z-50">
-  <h2 className="text-2xl font-bold mb-4 text-center">How to play Sudoku</h2>
+  <div className="fixed left-1/2 top-1/2 transform -translate-x-1/2 
+  -translate-y-1/2 w-11/12 max-w-2xl bg-white rounded-lg shadow-xl z-50 
+  overflow-hidden flex flex-col max-h-[90vh]">
+
+  <h2 className="text-2xl font-bold mt-4 mb-4 text-center">How to play Sudoku</h2>
+  <div className="p-6 overflow-y-auto flex-grow">
+
   <div className="prose max-w-none">
            
   <p className="mb-4">         
@@ -58,12 +63,15 @@ Sudoku improves logical thinking, pattern recognition, and concentration. With p
 
 </p>
 </div>
+</div>
+<div className="p-6 bg-gray-100">
 <button 
           className="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
           onClick={onClose}
         >
           Close
         </button>
+        </div>
         </div>
 </>
 )
