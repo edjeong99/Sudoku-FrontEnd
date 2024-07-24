@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import SudokuBoard from "./components/SudokuBoard";
 import Sidebar from "./components/Sidebar";
 import "./App.css";
 import HowToPlay from "./components/HowToPlay";
+import AuthProvider from "./hooks/AuthProvider";
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [difficulty, setDifficulty] = useState("Easy");
@@ -19,16 +20,17 @@ function App() {
     setKey((prevKey) => prevKey + 1);
   };
 
-
   return (
     <div className="flex h-screen">
-      <Sidebar
-        sidebarOpen={sidebarOpen}
-        onDifficultyChange={changeDifficulty}
-        onOpenPopup={openPopup} 
-      />
- <HowToPlay isOpen={isPopupOpen} onClose={closePopup} />
-      <SudokuBoard difficulty={difficulty} key={key} />
+      <AuthProvider>
+        <Sidebar
+          sidebarOpen={sidebarOpen}
+          onDifficultyChange={changeDifficulty}
+          onOpenPopup={openPopup}
+        />
+        <HowToPlay isOpen={isPopupOpen} onClose={closePopup} />
+        <SudokuBoard difficulty={difficulty} key={key} />
+      </AuthProvider>
     </div>
   );
 }

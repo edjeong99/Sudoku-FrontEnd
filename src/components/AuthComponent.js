@@ -1,71 +1,74 @@
 import React, { useState } from 'react';
-import { signUp, signIn } from '../util/auth';
+import { useAuth } from '../hooks/AuthProvider';
 
-const AuthComponent = ({ setUser }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [displayName, setDisplayName] = useState('');
+const AuthComponent = () => {
+  const [input, setInput] = useState({
+    username: "",
+    password: "",
+    displayName: ""
+  });
   const [isSignUp, setIsSignUp] = useState(false);
-  const [message, setMessage] = useState('');
+  
 
-  const handleSignUp = async () => {
-    console.log(email, password, displayName)
-    try {
-      const response = await signUp(email, password, displayName);
-      console.log(response);
-      setUser({displayName : response.displayName, email : response.email, uid :response.uid});
-      console.log(response.displayName, response.email, response.uid)
-      localStorage.setItem('token', response.token);
-      localStorage.setItem('userId', response.uid);
-      setMessage(`Sign-up successful! Welcome, ${displayName}`);
-    } catch (error) {
-      setMessage('Sign-up failed');
-    }
+  const auth = useAuth();
+  const handleInput = (e) => {
+    const { name, value } = e.target;
+    setInput((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  const handleClick = () => {
+    console.log(input)
+    if(isSignUp)
+      auth.handleSignUp(input)
+    else
+      auth.handleSignIn(input)
+
   };
 
-  const handleSignIn = async () => {
-    try {
-      const response = await signIn(email, password);
-      console.log(response)
-      setUser(response.user);
-      localStorage.setItem('token', response.token);
-      
-      setMessage(`Sign-in successful! Welcome back, ${response.result.email}`);
-    } catch (error) {
-      setMessage('Sign-in failed');
-    }
-  };
 
   return (
     <div className="mt-10">
     <h3 className="text-lg mb-4 text-black text-center font-bold">
       {isSignUp ? 'Sign Up' : 'Sign In'}
     </h3>
+    <label className="text-black" htmlFor="user-email">Email:</label>
     <input
       type="email"
-      value={email}
-      onChange={(e) => setEmail(e.target.value)}
-      placeholder="Email"
+      name="email"
+      // value={email}
+      onChange={handleInput}
+      placeholder="example@gmail.com"
       className="w-full px-3 py-2 mb-3 text-sm text-gray-700 bg-white border rounded-md focus:outline-none focus:border-blue-500"
     />
+            <label className="text-black" htmlFor="password">Password:</label>
+
     <input
       type="password"
-      value={password}
-      onChange={(e) => setPassword(e.target.value)}
+      name="password"
+
+      // value={password}
+      onChange={handleInput}
       placeholder="Password"
       className="w-full px-3 py-2 mb-3 text-sm text-gray-700 bg-white border rounded-md focus:outline-none focus:border-blue-500"
     />
     {isSignUp && (
+      <>
+     <label className="text-black" htmlFor="displayName">Name:</label>
+
       <input
         type="text"
-        value={displayName}
-        onChange={(e) => setDisplayName(e.target.value)}
-        placeholder="Display Name"
+         name="displayName"
+        // value={displayName}
+        onChange={handleInput}
+        placeholder="John Smith"
         className="w-full px-3 py-2 mb-3 text-sm text-gray-700 bg-white border rounded-md focus:outline-none focus:border-blue-500"
       />
+      </>
     )}
     <button 
-      onClick={isSignUp ? handleSignUp : handleSignIn}
+      onClick={handleClick}
       className="w-full px-4 py-2 mb-3 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
     >
       {isSignUp ? 'Sign Up' : 'Sign In'}
@@ -76,7 +79,7 @@ const AuthComponent = ({ setUser }) => {
     >
       {isSignUp ? 'Already have an account? Sign In' : 'Need an account? Sign Up'}
     </button>
-    <p className="text-sm text-black">{message}</p>
+    {auth?.message && <p className="text-sm text-black">{auth.message}</p>}
   </div>
   );
 };

@@ -1,22 +1,16 @@
 import React, { useState, useEffect } from "react";
-import {
-  signInWithPopup,
-  GoogleAuthProvider,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
-import Modal from "../util/modal.js";
-//import { createUserProfile, getUserProfile } from '../util/userProfile';
+
 import AuthComponent from "./AuthComponent";
 import { FaBars } from "react-icons/fa";
 import { useIsMobile } from "../hooks/useIsMobile";
-import HowToPlay from "./HowToPlay.js";
+import { useAuth } from '../hooks/AuthProvider';
 
 const Sidebar = ({ onDifficultyChange, onOpenPopup }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [user, setUser] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const isMobile = useIsMobile();
+  const auth = useAuth();
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -46,7 +40,7 @@ const handleLogOut = () => {
       >
         <div className="mb-4 ">
           <h3 className="text-lg mb-2 font-bold text-black text-center">
-            Welcome {user ? user?.displayName : ""}
+            Welcome {auth.user ? auth.user?.displayName : ""}
           </h3>
         </div>
 
@@ -88,18 +82,19 @@ const handleLogOut = () => {
         >
           How to play
         </button>
-        {user ? (
+        <div className="h-64">
+        {auth.user ? (
           <button
-            onClick={() => handleLogOut()}
+            onClick={() => auth.handlelogOut()}
             size="sm"
             className="bg-red-100 hover:bg-red-400 text-black font-bold py-2 px-4 rounded mb-2 w-full mt-5"
           >
             Log Out
           </button>
         ) : (
-          <AuthComponent setUser={setUser} />
+          <AuthComponent />
         )}
-
+</div>
     <div className="flex items-center justify-between w-full mt-10">
       <img
         src="/EDMIKYLogoWhiteBG2.png"
