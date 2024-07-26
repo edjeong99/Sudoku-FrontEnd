@@ -24,20 +24,20 @@ const AuthProvider = ({ children }) => {
     }
   };
   const handleSignUp = async (data) => {
-    const { email, password, displayName } = data;
-    console.log(email, password, displayName);
+    const { email, password, nickName } = data;
+    console.log(email, password, nickName);
     try {
-      const response = await signUp(email, password, displayName);
+      const response = await signUp(email, password, nickName);
       console.log(response);
       setUser({
-        displayName: response.displayName,
+        nickName: response.nickName,
         email: response.email,
         uid: response.uid,
       });
-      console.log(response.displayName, response.email, response.uid);
+      console.log(response.nickName, response.email, response.uid);
       localStorage.setItem("token", response.token);
       localStorage.setItem("userId", response.uid);
-      setMessage(`Sign-up successful! Welcome, ${displayName}`);
+      setMessage(`Sign-up successful! Welcome, ${nickName}`);
     } catch (error) {
       setMessage("Sign-up failed");
     }
@@ -49,13 +49,13 @@ const AuthProvider = ({ children }) => {
     setMessage("Logout Successfully");
   };
 
-  return(
-  <AuthContext.Provider
-    value={{ token, user, message, handleSignUp, handleSignIn, handlelogOut }}
-  >
-    {children}
-  </AuthContext.Provider>
-  )
+  return (
+    <AuthContext.Provider
+      value={{ token, user, message, handleSignUp, handleSignIn, handlelogOut }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export default AuthProvider;

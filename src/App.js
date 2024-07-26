@@ -4,6 +4,8 @@ import Sidebar from "./components/Sidebar";
 import "./App.css";
 import HowToPlay from "./components/HowToPlay";
 import AuthProvider from "./hooks/AuthProvider";
+
+
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [difficulty, setDifficulty] = useState("Easy");
