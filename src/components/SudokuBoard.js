@@ -265,6 +265,9 @@ saves users game time.  retrieve all completed times for this difficulty
         handleNumberSelect={handleNumberSelect}
         chartData={chartData}
         isSolved={isSolved}
+        difficulty={difficulty}
+    
+        
       />
 
       <BottomComponent
