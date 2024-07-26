@@ -105,7 +105,7 @@ const Sidebar = ({ onDifficultyChange, onOpenPopup }) => {
         >
           How to play
         </button>
-        <div className="h-64">
+        <div className="min-h-72">
           {auth.user ? (
             <button
               onClick={() => auth.handlelogOut()}

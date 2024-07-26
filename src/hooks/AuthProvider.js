@@ -32,13 +32,14 @@ const AuthProvider = ({ children }) => {
       setUser({
         nickName: response.nickName,
         email: response.email,
-        uid: response.uid,
+        _id: response._id,
       });
-      console.log(response.nickName, response.email, response.uid);
+      console.log(response.nickName, response.email, response._id);
       localStorage.setItem("token", response.token);
-      localStorage.setItem("userId", response.uid);
+      localStorage.setItem("_userId", response._id);
       setMessage(`Sign-up successful! Welcome, ${nickName}`);
     } catch (error) {
+      console.log(error.message);
       setMessage("Sign-up failed");
     }
   };

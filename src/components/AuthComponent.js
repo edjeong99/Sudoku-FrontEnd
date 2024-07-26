@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 const AuthComponent = () => {
   const [input, setInput] = useState({
-    username: "",
+    email: "",
     password: "",
     nickName: "",
   });
