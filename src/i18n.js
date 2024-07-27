@@ -7,6 +7,7 @@ i18n.use(initReactI18next).init({
   resources: {
     en: {
       translation: {
+        // Sidebar translation
         "Welcome": "Welcome",
         "Menu":"Menu",
         "Easy":"Easy",
@@ -20,6 +21,17 @@ i18n.use(initReactI18next).init({
         "Need an account":"Need an account? Sign Up",
         "Already have" : "Already have an account? Sign In",
         "Log Out":"Log Out",
+        
+        // sudokuBoard translation
+        "Difficulty":"Difficulty",
+        "Check":"Check",
+        "New Game":"New Game",
+        "Hint":"Hint",
+        "Loading":"puzzle loading!",
+        "COMPLETED":"COMPLETED!!!",
+        "cells solved":"cells solved",
+        "No Empty cells":"No Empty cells to give a hint!",
+       
       },
       
     },
@@ -37,8 +49,13 @@ i18n.use(initReactI18next).init({
         "Sign Up":"가입",
         "Need an account":"계정이 없으세요? 가입하세요",
         "Already have" : "계정이 있으세요? 로그인하세요",
-
         "Log Out":"로그아웃",
+        "Difficulty":"난이도",
+        "Check":"확인",
+        "New Game":"새 게임",
+        "Hint":"힌트",
+        "Loading":"게임 로딩중!"
+
       }
     }
   },

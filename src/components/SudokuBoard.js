@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import BottomComponent from "./BottomComponent";
 import DisplaySudokuBoard from "./DisplaySudokuBoard";
+import { useTranslation } from "react-i18next";
 
 const SudokuBoard = ({ difficulty }) => {
   const [puzzle, setPuzzle] = useState([]); // initial state of sudoku board
@@ -25,10 +26,10 @@ const SudokuBoard = ({ difficulty }) => {
     playerTime: null,
   });
   const [allTimes, setAllTimes] = useState([]);
-
   const API_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:8080";
-  console.log("API_URL is ", API_URL);
+  const { t } = useTranslation();
 
+  console.log("API_URL is ", API_URL);
   useEffect(() => {
     fetchPuzzle();
     getAllTimes();
@@ -110,7 +111,8 @@ const SudokuBoard = ({ difficulty }) => {
         setHintCells(new Set()); // Reset hinted cell
         setIsSolved(false);
         setResetTimer(!resetTimer); // for timer reset
-        setStat("Correct : 0     Wrong : 0    Empty : " + `${emptyCell}`);
+        setStat(`✔️ 0,   ❌ 0,   🔲  ${emptyCell}`)
+
         setBeginTime(Date.now());
       })
       .catch((error) => {
@@ -203,9 +205,9 @@ saves users game time.  retrieve all completed times for this difficulty
     });
 
     // Construct the stat and message
-    setStat(
-      `Correct : ${correctCount}     Wrong : ${wrongCount}    Empty : ${emptyCount}`
-    );
+    setStat(`✔️ ${correctCount},   ❌ ${wrongCount},   🔲  ${emptyCount}`)
+
+
     setIncorrectCells(incorrectCells);
 
     // if game is completed
@@ -252,7 +254,7 @@ saves users game time.  retrieve all completed times for this difficulty
       </h1>
 
       <div className="text-lg font-semibold mb-4">
-        Difficulty : {difficulty}
+        {t("Difficulty")} :{t(difficulty)}
       </div>
       <DisplaySudokuBoard
         puzzle={puzzle}
