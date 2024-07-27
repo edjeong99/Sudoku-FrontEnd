@@ -1,6 +1,6 @@
 import React from "react";
 import { useAuth } from '../hooks/AuthProvider';
-import GameTimeChart from './GameTimeChart';
+import GameTimeChart from '../components/GameTimeChart';
 
 const GameCompletePage = ({chartData, difficulty}) => {
 

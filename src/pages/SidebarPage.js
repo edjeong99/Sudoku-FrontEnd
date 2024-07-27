@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Flag from "react-world-flags";
-import AuthComponent from "./AuthComponent";
+import AuthComponent from "../components/AuthComponent";
 import { FaBars } from "react-icons/fa";
 import { useIsMobile } from "../hooks/useIsMobile";
 import { useAuth } from "../hooks/AuthProvider";
 import { useTranslation } from "react-i18next";
 
-const Sidebar = ({ onDifficultyChange, onOpenPopup }) => {
+const SidebarPage = ({ onDifficultyChange, onOpenPopup }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [language, setLanguage] = useState("en");
   const { i18n } = useTranslation();
@@ -141,4 +141,4 @@ const Sidebar = ({ onDifficultyChange, onOpenPopup }) => {
   );
 };
 
-export default Sidebar;
+export default SidebarPage;

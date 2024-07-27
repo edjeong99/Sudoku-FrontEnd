@@ -4,10 +4,8 @@
  */
 
 import React, { useEffect, useState } from "react";
-import MiniNumberPad from "./MiniNumberPad";
-import GameCompletePage from "./GameCompletePage";
 import { useIsMobile } from "../hooks/useIsMobile";
-import { BiLoaderAlt } from "react-icons/bi";
+
 import { useTranslation } from "react-i18next";
 
 const DisplaySudokuBoard = ({
@@ -18,30 +16,15 @@ const DisplaySudokuBoard = ({
   incorrectCells,
   setSelectedCell,
   handleInputChange,
-  handleNumberSelect,
-  chartData,
-  isSolved,
-  difficulty,
+
+
 }) => {
   const { t } = useTranslation();
-
-  console.log(isSolved, chartData);
   const isMobile = useIsMobile();
 
   return (
     <>
-      {!puzzle.length ? (
-        <div className="flex flex-col items-center justify-center h-64 bg-gray-100 rounded-lg">
-          <BiLoaderAlt className="text-6xl text-blue-500 mb-4 animate-spin" />
-          <p className="text-xl text-gray-600">{t("Loading")}</p>
-        </div>
-      ) : isSolved ? (
-        chartData &&
-        chartData.allTimes &&
-        chartData.allTimes.length > 0 && (
-          <GameCompletePage chartData={chartData} difficulty={difficulty} />
-        )
-      ) : (
+ 
         <div className="font-cursive grid grid-cols-9 border-2 border-gray-800 overflow-hidden">
           {puzzle.map((row, rowIndex) =>
             row.map((cell, colIndex) => {
@@ -111,9 +94,9 @@ const DisplaySudokuBoard = ({
             })
           )}
         </div>
-      )}
+      
 
-      {isMobile && <MiniNumberPad handleNumberSelect={handleNumberSelect} />}
+    
     </>
   );
 };

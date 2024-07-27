@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import SudokuBoard from "./components/SudokuBoard";
-import Sidebar from "./components/Sidebar";
+import SudokuBoardPage from "./pages/SudokuBoardPage";
+import SidebarPage from "./pages/SidebarPage";
 import "./App.css";
-import HowToPlay from "./components/HowToPlay";
+import HowToPlayPage from "./pages/HowToPlayPage";
 import AuthProvider from "./hooks/AuthProvider";
 
 
@@ -25,13 +25,13 @@ function App() {
   return (
     <div className="flex h-screen">
       <AuthProvider>
-        <Sidebar
+        <SidebarPage
           sidebarOpen={sidebarOpen}
           onDifficultyChange={changeDifficulty}
           onOpenPopup={openPopup}
         />
-        <HowToPlay isOpen={isPopupOpen} onClose={closePopup} />
-        <SudokuBoard difficulty={difficulty} key={key} />
+        <HowToPlayPage isOpen={isPopupOpen} onClose={closePopup} />
+        <SudokuBoardPage difficulty={difficulty} key={key} />
       </AuthProvider>
     </div>
   );

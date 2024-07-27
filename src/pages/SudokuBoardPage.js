@@ -5,11 +5,15 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import BottomComponent from "./BottomComponent";
-import DisplaySudokuBoard from "./DisplaySudokuBoard";
+import BottomComponent from "../components/BottomComponent";
+import DisplaySudokuBoard from "../components/DisplaySudokuBoard";
 import { useTranslation } from "react-i18next";
+import { useIsMobile } from "../hooks/useIsMobile";
+import MiniNumberPad from "../components/MiniNumberPad";
+import { BiLoaderAlt } from "react-icons/bi";
+import GameCompletePage from "./GameCompletePage";
 
-const SudokuBoard = ({ difficulty }) => {
+const SudokuBoardPage = ({ difficulty }) => {
   const [puzzle, setPuzzle] = useState([]); // initial state of sudoku board
   const [solution, setSolution] = useState([]); // complete solution of sudoku board
   const [userInput, setUserInput] = useState([]); // updated sudoku board with user input
@@ -28,6 +32,7 @@ const SudokuBoard = ({ difficulty }) => {
   const [allTimes, setAllTimes] = useState([]);
   const API_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:8080";
   const { t } = useTranslation();
+  const isMobile = useIsMobile();
 
   console.log("API_URL is ", API_URL);
   useEffect(() => {
@@ -256,6 +261,18 @@ saves users game time.  retrieve all completed times for this difficulty
       <div className="text-lg font-semibold mb-4">
         {t("Difficulty")} :{t(difficulty)}
       </div>
+      {!puzzle.length ? (
+        <div className="flex flex-col items-center justify-center h-64 bg-gray-100 rounded-lg">
+          <BiLoaderAlt className="text-6xl text-blue-500 mb-4 animate-spin" />
+          <p className="text-xl text-gray-600">{t("Loading")}</p>
+        </div>
+      ) : isSolved ? (
+        chartData &&
+        chartData.allTimes &&
+        chartData.allTimes.length > 0 && (
+          <GameCompletePage chartData={chartData} difficulty={difficulty} />
+        )
+      ) :(
       <DisplaySudokuBoard
         puzzle={puzzle}
         userInput={userInput}
@@ -264,14 +281,8 @@ saves users game time.  retrieve all completed times for this difficulty
         incorrectCells={incorrectCells}
         setSelectedCell={setSelectedCell}
         handleInputChange={handleInputChange}
-        handleNumberSelect={handleNumberSelect}
-        chartData={chartData}
-        isSolved={isSolved}
-        difficulty={difficulty}
-    
-        
-      />
-
+       />)}
+     {isMobile && <MiniNumberPad handleNumberSelect={handleNumberSelect} />}
       <BottomComponent
         handleCheckClick={handleCheckClick}
         fetchPuzzle={fetchPuzzle}
@@ -285,4 +296,4 @@ saves users game time.  retrieve all completed times for this difficulty
   );
 };
 
-export default SudokuBoard;
+export default SudokuBoardPage;
