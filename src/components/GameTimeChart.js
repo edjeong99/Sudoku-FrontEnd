@@ -58,7 +58,7 @@ const GameTimeChart = ({ chartData }) => {
       // const allPlayersData = replaceZeroWithPrevious(
       //   timeRange.map((time) => timeFrequency[time] || 0)
       // );
-console.log(timeRange)
+//console.log(timeRange)
       setChartDisplayData({
         labels: timeRange,
         datasets: [
@@ -131,10 +131,10 @@ console.log(timeRange)
     },
   };
 
-  console.log(
-    chartDisplayData?.datasets[0].data,
-    chartDisplayData?.datasets[1].data
-  );
+  // console.log(
+  //   chartDisplayData?.datasets[0].data,
+  //   chartDisplayData?.datasets[1].data
+  // );
   if (!chartDisplayData) return <div>Loading...</div>;
 
   return (

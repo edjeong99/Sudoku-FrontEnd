@@ -12,6 +12,7 @@ import { useIsMobile } from "../hooks/useIsMobile";
 import MiniNumberPad from "../components/MiniNumberPad";
 import { BiLoaderAlt } from "react-icons/bi";
 import GameCompletePage from "./GameCompletePage";
+import { useAuth } from "../hooks/AuthProvider";
 
 const SudokuBoardPage = ({ difficulty }) => {
   const [puzzle, setPuzzle] = useState([]); // initial state of sudoku board
@@ -33,11 +34,12 @@ const SudokuBoardPage = ({ difficulty }) => {
   const API_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:8080";
   const { t } = useTranslation();
   const isMobile = useIsMobile();
+  const auth = useAuth();
 
-  console.log("API_URL is ", API_URL);
+  
   useEffect(() => {
     fetchPuzzle();
-    getAllTimes();
+  
   }, [difficulty]);
 
   const getAllTimes = () => {
@@ -123,6 +125,7 @@ const SudokuBoardPage = ({ difficulty }) => {
       .catch((error) => {
         console.error("There was an error fetching the puzzle!", error);
       });
+      getAllTimes();
   };
 
   const handleNumberSelect = (number) => {
@@ -161,21 +164,17 @@ saves users game time.  retrieve all completed times for this difficulty
     const duration = Math.floor(playTime); // Time in seconds
     setChartData({ allTimes: allTimes, playerTime: playTime });
 
-    let token = localStorage.getItem("token");
-    // console.log(userId);
-    if (!token) return;
 
+console.log(auth.user)
     axios
       .post(
-        `${API_URL}/user/saveSudokuTime`,
-        { time: duration, difficulty: difficulty },
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
-      )
+        `${API_URL}/user/updateStats`,
+        { time: duration, difficulty: difficulty, userId : auth.user?._id },
+        )
       .then((response) => {
-        const { message } = response.data;
-        console.log(message);
+        const { user, message } = response.data;
+        console.log(user);
+        auth.setUser(user)
       })
       .catch((error) => {
         console.error("Error saving Sudoku time:", error);
