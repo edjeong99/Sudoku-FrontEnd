@@ -1,66 +1,59 @@
 /********
- * DisplaySusokuBoard manage displaying the board and minipad 
- * 
+ * DisplaySusokuBoard manage displaying the board and minipad
+ *
  */
 
 import React, { useEffect, useState } from "react";
-import MiniNumberPad from "./MiniNumberPad";
-import GameTimeChart from './GameTimeChart';
-import {useIsMobile} from "../hooks/useIsMobile";
-import { BiLoaderAlt } from 'react-icons/bi'; 
+import { useIsMobile } from "../hooks/useIsMobile";
 
-const DisplaySudokuBoard = ({ puzzle, userInput, hintCells, selectedCell, incorrectCells, setSelectedCell, handleInputChange,handleNumberSelect, chartData, isSolved }) => {
+import { useTranslation } from "react-i18next";
 
-   console.log(isSolved, chartData)
+const DisplaySudokuBoard = ({
+  puzzle,
+  userInput,
+  hintCells,
+  selectedCell,
+  incorrectCells,
+  setSelectedCell,
+  handleInputChange,
+
+
+}) => {
+  const { t } = useTranslation();
   const isMobile = useIsMobile();
 
-    return (
+  return (
     <>
-     
-      {!puzzle.length ? (
-        <div className="flex flex-col items-center justify-center h-64 bg-gray-100 rounded-lg">
-         <BiLoaderAlt className="text-6xl text-blue-500 mb-4 animate-spin" />
-          <p className="text-xl text-gray-600">puzzle loading!</p>
-        </div>
-      ) : 
-      isSolved ?(
-        chartData && chartData.allTimes && chartData.allTimes.length > 0 && (
-          <GameTimeChart chartData={chartData} />
-        )
-      )
-
-      
-
-      :
-      (
-        
-          <div  className="grid grid-cols-9 gap-0 border-2 border-gray-800">
-         { puzzle.map((row, rowIndex) =>
-          row.map((cell, colIndex) => {
-            const isIncorrect = incorrectCells.some(
-              ([i, j]) => i === rowIndex && j === colIndex
-            );
-            return (
-              <div
-                key={`${rowIndex}-${colIndex}`}
-                className={`
-                  w-10 h-10 text-center outline-none
-                  border border-gray-300 font-bold
-                  ${rowIndex % 3 === 0 ? "border-t-2 border-t-gray-800" : ""}
-                  ${colIndex % 3 === 0 ? "border-l-2 border-l-gray-800" : ""}
-                  ${rowIndex === 8 ? "border-b-2 border-b-gray-800" : ""}
-                  ${colIndex === 8 ? "border-r-2 border-r-gray-800" : ""}
-                  ${ // decide background color - cliecked, wrong, hint, etc
+ 
+        <div className="font-cursive grid grid-cols-9 border-2 border-gray-800 overflow-hidden">
+          {puzzle.map((row, rowIndex) =>
+            row.map((cell, colIndex) => {
+              const isIncorrect = incorrectCells.some(
+                ([i, j]) => i === rowIndex && j === colIndex
+              );
+              return (
+                <div
+                  key={`${rowIndex}-${colIndex}`}
+                  className={`
+                   relative
+              before:content-[''] before:float-left before:pb-[100%]
+              border-r border-b border-gray-300 font-cursive font-bold
+               ${(rowIndex + 1) % 3 === 0 ? "border-b-2 border-b-gray-800" : ""}
+              ${(colIndex + 1) % 3 === 0 ? "border-r-2 border-r-gray-800" : ""}
+              ${rowIndex === 0 ? "border-t border-t-gray-300" : ""}
+              ${colIndex === 0 ? "border-l border-l-gray-300" : ""}
+                  ${
+                    // decide background color - cliecked, wrong, hint, etc
                     cell !== 0
                       ? " bg-gray-100"
-                      :   isIncorrect
+                      : isIncorrect
                       ? "bg-red-200"
-                      :
-                      (selectedCell && selectedCell.rowIndex === rowIndex && selectedCell.colIndex === colIndex )
-                        ? 'bg-blue-200' 
+                      : selectedCell &&
+                        selectedCell.rowIndex === rowIndex &&
+                        selectedCell.colIndex === colIndex
+                      ? "bg-blue-200"
                       : hintCells.has(`${rowIndex}-${colIndex}`)
                       ? "bg-yellow-200"
-                     
                       : "bg-white"
                   }
                   ${
@@ -71,31 +64,39 @@ const DisplaySudokuBoard = ({ puzzle, userInput, hintCells, selectedCell, incorr
                   }
                   ${puzzle[rowIndex][colIndex] === 0 ? "text-blue-600" : ""}
                   flex items-center justify-center 
-                   ${isMobile ? 'cursor-pointer' : ''}
+                   ${isMobile ? "cursor-pointer" : ""}
                 `}
-                onClick={() => setSelectedCell({ rowIndex, colIndex })}
-              >
-               {isMobile ? (
-                  userInput[rowIndex][colIndex] || (cell !== 0 ? cell : '')
-                ) : (
-                  <input
-                    type="text"
-                    value={userInput[rowIndex][colIndex]}
-                    onChange={(e) => handleInputChange(e, rowIndex, colIndex)}
-                    disabled={cell !== 0}
-                    className="w-full h-full text-center outline-none bg-transparent"
-                  />
-                )}
-              </div>
-            );
-          })
-        )}
-         </div>
-        )}
-     
+                  onClick={() => setSelectedCell({ rowIndex, colIndex })}
+                >
+                  <div className="absolute inset-0 flex items-center justify-center font-cursive">
+                    {isMobile ? (
+                      <span className="text-lg font-bold font-cursive">
+                        {userInput[rowIndex][colIndex] ||
+                          (cell !== 0 ? cell : "")}
+                      </span>
+                    ) : (
+                      <input
+                        type="text"
+                        value={
+                          userInput[rowIndex][colIndex] ||
+                          (cell !== 0 ? cell : "")
+                        }
+                        className="w-full h-full text-center outline-none bg-transparent text-lg font-bold font-cursive"
+                        readOnly={cell !== 0}
+                        onChange={(e) =>
+                          handleInputChange(e, rowIndex, colIndex)
+                        }
+                      />
+                    )}
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
       
-      {isMobile && <MiniNumberPad handleNumberSelect={handleNumberSelect} />    }
 
+    
     </>
   );
 };
