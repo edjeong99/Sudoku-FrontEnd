@@ -1,0 +1,7 @@
+version: 1
+frontend:
+  customHeaders:
+    - pattern: '**/sitemap.xml'
+      headers:
+        - key: 'Content-Type'
+          value: 'application/xml'
