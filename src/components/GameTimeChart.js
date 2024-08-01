@@ -138,7 +138,7 @@ const GameTimeChart = ({ chartData }) => {
   if (!chartDisplayData) return <div>Loading...</div>;
 
   return (
-    <div max-w-full>
+    <div className= "max-w-full">
       <h2>Game Completion Times Distribution</h2>
       <Line data={chartDisplayData} options={options} height={250} />
     </div>
