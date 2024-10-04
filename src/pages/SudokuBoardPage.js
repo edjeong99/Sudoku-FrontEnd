@@ -95,7 +95,7 @@ const SudokuBoardPage = ({ difficulty }) => {
 
   const fetchPuzzle = () => {
     axios
-      .get(`${API_URL}/generate?difficulty=${difficulty}`)
+      .get(`${API_URL}/play/generate?difficulty=${difficulty}`)
       .then((response) => {
         let emptyCell = 0;
         //    console.log(response.data);
@@ -237,7 +237,7 @@ console.log(auth.user)
         return;
       }
 
-      const response = await axios.post(`${API_URL}/hint`, {
+      const response = await axios.post(`${API_URL}/play/hint`, {
         puzzle: puzzleForHint,
       });
       const hint = response.data;

@@ -11,6 +11,9 @@
 # production
 /build
 
+# Android Mobile App
+/android
+
 # misc
 .DS_Store
 .env.local
