@@ -16,14 +16,12 @@ MongoDB
 
 
   # Notes
-  Puzzle is initial sudoku.
-  Solution is completly filled sudoku.
+  "Puzzle" is initial sudoku state from server.
+  "Solution" is completly filled sudoku.
   Puzzle and Solution is received from backend when 1.sudoku starts, 2.difficulty is clicked and 3.new game is clicked.
 
-  UserInput has Puzzle + user inputs
+  "UserInput" has Puzzle + user inputs
 
-# Testing
-use Jest and React Testing Library
 
 # AWS Amplify
 Deployed using AWS Amplified.
