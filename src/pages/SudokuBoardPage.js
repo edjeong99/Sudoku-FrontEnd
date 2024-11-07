@@ -94,6 +94,7 @@ const SudokuBoardPage = ({ difficulty }) => {
   };
 
   const fetchPuzzle = () => {
+   
     axios
       .get(`${API_URL}/play/generate?difficulty=${difficulty}`)
       .then((response) => {
